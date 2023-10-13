@@ -1,0 +1,25 @@
+{
+	"frm_name": "Fromulario uno",
+	"frm_cod":"12345",
+"sections":[
+{"name_section": "datos del piolin",
+"questions":[
+{ "question": "porque nacen los pajaritos", "order": 0, "type": 0, "answers": [  { "answer": "por milagro", "order": 1, "type": 0 }, { "answer": "Por caida del arbol", "order": 2, "type": 0 }, { "answer": "por movida del aire", "order": 3, "type": 0 }, { "answer": "ninguno", "order": 4, "type": 0 } ] },
+{ "question": "describir el alamo", "order": 0, "type": 2, "answers": [ { "answer": "Open", "order": 1, "type": 2 } ] },
+{ "question": "Seleccione su aficiones", "order": 0, "type": 1, "answers": [  { "answer": "saltar", "order": 1, "type": 1 }, { "answer": "arrastrarse", "order": 2, "type": 1 }, { "answer": "llorar", "order": 3, "type": 1 }, { "answer": "cantar", "order": 4, "type": 1 }, { "answer": "sexo", "order": 5, "type": 1 } ] },
+{ "question": "Por favor llene la matriz nioja", "order": 0, "type": 3, "answers": [ { "question": "f1", "order": 1, "type": 3, "answers": [  { "answer": "col1", "order": 1, "type": 3 }, { "answer": "col2", "order": 2, "type": 3 } ] }, { "question": "f2", "order": 2, "type": 3, "answers": [  { "answer": "col1", "order": 1, "type": 3 }, { "answer": "col2", "order": 2, "type": 3 } ] }, { "question": "f3", "order": 3, "type": 3, "answers": [  { "answer": "col1", "order": 1, "type": 3 }, { "answer": "col2", "order": 2, "type": 3 } ] }, { "question": "f4", "order": 4, "type": 3, "answers": [  { "answer": "col1", "order": 1, "type": 3 }, { "answer": "col2", "order": 2, "type": 3 } ] }, { "question": "f5", "order": 5, "type": 3, "answers": [  { "answer": "col1", "order": 1, "type": 3 }, { "answer": "col2", "order": 2, "type": 3 } ] } ] }
+]
+},
+{"name_section": "Seccion del Grid",
+"questions":[
+{ "question": "Preguntas por Grid", "order": 0, "type": 3, "answers": [ { "question": "f1", "order": 1, "type": 3, "answers": [  { "answer": "col1", "order": 1, "type": 3 }, { "answer": "col2", "order": 2, "type": 3 } ] }, { "question": "f2", "order": 2, "type": 3, "answers": [  { "answer": "col1", "order": 1, "type": 3 }, { "answer": "col2", "order": 2, "type": 3 } ] }, { "question": "f3", "order": 3, "type": 3, "answers": [  { "answer": "col1", "order": 1, "type": 3 }, { "answer": "col2", "order": 2, "type": 3 } ] }, { "question": "f4", "order": 4, "type": 3, "answers": [  { "answer": "col1", "order": 1, "type": 3 }, { "answer": "col2", "order": 2, "type": 3 } ] }, { "question": "f5", "order": 5, "type": 3, "answers": [  { "answer": "col1", "order": 1, "type": 3 }, { "answer": "col2", "order": 2, "type": 3 } ] } ] }
+]
+}, 
+{"name_section": "Seccion groovy",
+"questions":[
+{ "question": "Por que kaliman", "order": 0, "type": 0, "answers": [  { "answer": "por milagro", "order": 1, "type": 0 }, { "answer": "Por caida del arbol", "order": 2, "type": 0 }, { "answer": "por movida del aire", "order": 3, "type": 0 }, { "answer": "ninguno", "order": 4, "type": 0 } ] },
+{ "question": "Por que gil", "order": 0, "type": 2, "answers": [ { "answer": "Open", "order": 1, "type": 2 } ] },
+]
+},
+]
+}
