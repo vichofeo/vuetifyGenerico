@@ -1,16 +1,15 @@
 <template>
-    <v-data-table :headers="headers" :items="desserts" 
-     class="elevation-1">
+     <v-data-table :headers="headers" :items="desserts"  class="elevation-1">
         <template v-slot:top>
             <v-toolbar flat>
                 <v-toolbar-title>Rol de Usuario</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="500px">
-                    <template v-slot:activator="{ props }">
-                        <v-btn color="primary" dark class="mb-2" v-bind="props">
-                            Nuevo Rol
-                        </v-btn>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+              Nuevo Rol
+            </v-btn>
                     </template>
                     <v-card>
                         <v-card-title>
@@ -20,24 +19,30 @@
                         <v-card-text>
                             <v-container>
                                 <v-row>
+                                    <v-col cols="12" sm="12" md="12">
+                                    <list-box-forms
+      :items="appItems"
+      :selected="appSelected"
+      label="Seleccione la Aplicacion"
+      name="app"
+      
+    /></v-col>
                                     <v-col cols="12" sm="6" md="6">
                                         <v-text-field v-model="editedItem.nombre_rol" label="Nombre Rol"></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="6">
                                         <v-text-field v-model="editedItem.descripcion_rol" label="Descripcion Rol"></v-text-field>
-                                    </v-col>
-                                    
-                                    
+                                    </v-col>  
                                 </v-row>
                             </v-container>
                         </v-card-text>
 
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="blue-darken-1" variant="text" @click="close">
+                            <v-btn color="blue darken-1" text @click="close">
                                 Cancel
                             </v-btn>
-                            <v-btn color="blue-darken-1" variant="text" @click="save">
+                            <v-btn color="blue darken-1" text @click="save">
                                 Save
                             </v-btn>
                         </v-card-actions>
@@ -57,10 +62,10 @@
             </v-toolbar>
         </template>
         <template v-slot:item.actions="{ item }">
-            <v-icon size="small" class="me-2" @click="editItem(item.raw)">
+            <v-icon small class="mr-2" @click="editItem(item)">
                 mdi-pencil
             </v-icon>
-            <v-icon size="small" @click="deleteItem(item.raw)">
+            <v-icon small @click="deleteItem(item)">
                 mdi-delete
             </v-icon>
         </template>
@@ -73,15 +78,18 @@
 </template>
 
 <script>
-import * as srv from "@/service/ConfigPage"
+import ListBoxForms from "../inputs/ListBoxForms.vue";
+import * as srv from "@/services/admin/ConfigPageService" 
 export default {
+    components: { ListBoxForms },
     data: () => ({
         dialog: false,
         dialogDelete: false,
         headers: [            
-            { title: 'Rol', key: 'nombre_rol' },
-            { title: 'Descripcion', key: 'descripcion_rol' },
-            { title: 'Activo', key: 'activo' },
+            { text: 'Aplicacion', value: 'aplicacion.nombre_aplicacion' },
+            { text: 'Rol', value: 'nombre_rol' },
+            { text: 'Descripcion', value: 'descripcion_rol' },
+            { text: 'Activo', value: 'activo' },
             
         ],
         desserts: [],
@@ -96,6 +104,8 @@ export default {
             descripcion_rol: '',
             activo: '',
         },
+        appSelected: { value: "-1", title: "-Sin Datos-" },
+        appItems: [],
     }),
 
     computed: {
@@ -119,8 +129,15 @@ export default {
 
     methods: {
         async initialize() {
-            const datos = await srv.getRol()
-            this.desserts= datos.items
+            try {
+                const datos = await srv.getRol()
+            this.desserts= datos.data.rolItems
+            this.appItems = datos.data.aplicacion
+            this.appSelected = datos.data.aplicacionSelected
+            } catch (error) {
+                console.log(error);
+            };
+            
           
         },
 
@@ -162,8 +179,9 @@ export default {
                 Object.assign(this.desserts[this.editedIndex], this.editedItem)
             } else {
                 //graba informacion
+                this.editedItem.aplicacion_id = this.appSelected.value
                 const datos = await srv.saveRol( this.editedItem)
-                this.desserts = datos.items
+                this.desserts = datos.data.rolItems
             }
             this.close()
         },

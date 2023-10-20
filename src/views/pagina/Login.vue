@@ -23,7 +23,7 @@
                     name="login"
                     label="Login"
                     type="text"
-                    v-model="usuario.usuario"
+                    v-model="usuario.login"
                     :error="error"
                     :rules="[rules.required]"
                   ></v-text-field>
@@ -74,9 +74,9 @@ export default {
   },
   data() {
     return {
-      usuario: {
-        usuario: "vico",
-        password: "vico",
+      usuario: {    
+        login: 'sadmin'   ,
+        password: 'sadmin'
       },
       loading: false,
       showResult: false,
@@ -92,7 +92,7 @@ export default {
     async ingresar() {
       const vm = this;
 
-      if (!vm.usuario.usuario || !vm.usuario.password) {
+      if (!vm.usuario.login || !vm.usuario.password) {
         vm.result = "Login & Password no puede ser vacio.";
         vm.showResult = true;
 
@@ -101,13 +101,17 @@ export default {
       try {
         //envia daros
         const result = await srv.login(vm.usuario);
-        if (!result.error) {
+        if (result.ok) {
           const dataSession = {
               access_token: result.access_token,
               usr: result.usuario,
             };
           localStorage.setItem("token", btoa(JSON.stringify(dataSession)));
-          vm.$router.push({ name: "georeferencia" });
+          /**
+           * redireccion en funcion al rol ganado
+           */
+          vm.$router.push({ name: "adminMod" });
+          
         } else {
           vm.error = true;
           vm.result = "Login o Password incorrecto.";

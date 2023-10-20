@@ -1,4 +1,5 @@
 <template>
+ <div>
   <persona name="people" :setPeople="seteoPersona" />
   <v-divider />
   <list-box
@@ -50,6 +51,7 @@
     {{mensaje}}
     </div>
   {{ datosCnf }}
+ </div>
 </template>
 
 <script>

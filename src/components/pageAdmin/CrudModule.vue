@@ -1,16 +1,15 @@
 <template>
-    <v-data-table :headers="headers" :items="desserts" 
-     class="elevation-1">
+    <v-data-table :headers="headers" :items="desserts" sort-by="calories" class="elevation-1">
         <template v-slot:top>
             <v-toolbar flat>
                 <v-toolbar-title>Modulos</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="500px">
-                    <template v-slot:activator="{ props }">
-                        <v-btn color="primary" dark class="mb-2" v-bind="props">
-                            Nuevo Modulo
-                        </v-btn>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+              Nuevo Modulo
+            </v-btn>
                     </template>
                     <v-card>
                         <v-card-title>
@@ -31,17 +30,17 @@
                                     </v-col>
                                     <v-col cols="12" sm="6" md="6">
                                         <v-text-field v-model="editedItem.folder_base" label="nombre folder base"></v-text-field>
-                                    </v-col>                                    
+                                    </v-col>  
                                 </v-row>
                             </v-container>
                         </v-card-text>
 
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="blue-darken-1" variant="text" @click="close">
+                            <v-btn color="blue darken-1" text @click="close">
                                 Cancel
                             </v-btn>
-                            <v-btn color="blue-darken-1" variant="text" @click="save">
+                            <v-btn color="blue darken-1" text @click="save">
                                 Save
                             </v-btn>
                         </v-card-actions>
@@ -61,10 +60,10 @@
             </v-toolbar>
         </template>
         <template v-slot:item.actions="{ item }">
-            <v-icon size="small" class="me-2" @click="editItem(item.raw)">
+            <v-icon small class="mr-2" @click="editItem(item)">
                 mdi-pencil
             </v-icon>
-            <v-icon size="small" @click="deleteItem(item.raw)">
+            <v-icon small @click="deleteItem(item)">
                 mdi-delete
             </v-icon>
         </template>
@@ -77,17 +76,17 @@
 </template>
 
 <script>
-import * as srv from "@/service/ConfigPage"
+import * as srv from "@/services/admin/ConfigPageService"
 export default {
     data: () => ({
         dialog: false,
-        dialogDelete: false,
-        headers: [            
-            { title: 'Modulo', key: 'nombre_modulo' },
-            { title: 'Path Acceso', key: 'path_page' },
-            { title: 'Layout', key: 'layout' },
-            { title: 'Base Folder', key: 'folder_base' },
-            { title: 'Actions', key: 'actions', sortable: false },
+    dialogDelete: false,
+        headers: [
+            { text: 'Modulo', value: 'nombre_modulo' },
+            { text: 'Path Acceso', value: 'path_page' },
+            { text: 'Layout', value: 'layout' },
+            { text: 'Base Folder', value: 'folder_base' },
+            { text: 'Actions', value: 'actions', sortable: false },
         ],
         desserts: [],
         editedIndex: -1,
@@ -96,7 +95,7 @@ export default {
             path_page: '',
             layout: '',
             folder_base: '',
-            
+
         },
         defaultItem: {
             nombre_modulo: '',
@@ -113,12 +112,12 @@ export default {
     },
 
     watch: {
-        dialog(val) {
-            val || this.close()
-        },
-        dialogDelete(val) {
-            val || this.closeDelete()
-        },
+        dialog (val) {
+      val || this.close()
+    },
+    dialogDelete (val) {
+      val || this.closeDelete()
+    },
     },
 
     created() {
@@ -127,51 +126,61 @@ export default {
 
     methods: {
         async initialize() {
-            const datos = await srv.getModules()
-            this.desserts= datos.items
-          
+            try {
+                const result = await srv.getModules()
+                if (result.ok)
+                    this.desserts = result.data
+                else this.desserts = []
+            } catch (error) {
+                console.log(error);
+            };
+
+
         },
 
-        editItem(item) {
-            this.editedIndex = this.desserts.indexOf(item)
-            this.editedItem = Object.assign({}, item)
-            this.dialog = true
+        editItem (item) {
+      this.editedIndex = this.desserts.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialog = true
+    },
+
+    deleteItem (item) {
+      this.editedIndex = this.desserts.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialogDelete = true
+    },
+
+    deleteItemConfirm () {
+      this.desserts.splice(this.editedIndex, 1)
+      this.closeDelete()
+    },
+
+    close () {
+      this.dialog = false
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      })
+    },
+
+        closeDelete () {
+      this.dialogDelete = false
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      })
         },
 
-        deleteItem(item) {
-            this.editedIndex = this.desserts.indexOf(item)
-            this.editedItem = Object.assign({}, item)
-            this.dialogDelete = true
-        },
-
-        deleteItemConfirm() {
-            this.desserts.splice(this.editedIndex, 1)
-            this.closeDelete()
-        },
-
-        close() {
-            this.dialog = false
-            this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem)
-                this.editedIndex = -1
-            })
-        },
-
-        closeDelete() {
-            this.dialogDelete = false
-            this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem)
-                this.editedIndex = -1
-            })
-        },
-
-       async save() {
-            if (this.editedIndex > -1) {                
+        async save() {
+            if (this.editedIndex > -1) {
                 Object.assign(this.desserts[this.editedIndex], this.editedItem)
             } else {
                 //graba informacion
-                const datos = await srv.saveModule( this.editedItem)
-                this.desserts = datos.items
+                let result = await srv.saveModule(this.editedItem)
+                if(result.ok){
+                    result = await srv.getModules()
+                this.desserts = result.data
+            }else this.desserts
             }
             this.close()
         },

@@ -1,5 +1,6 @@
 <template>
-    <list-box-forms :items="appItems" :selected="appSelected" label="Seleccione la Aplicacion" name="app"
+    <div>
+        <list-box-forms :items="appItems" :selected="appSelected" label="Seleccione la Aplicacion" name="app"
         :onChange="onchangeModule" />
     <list-box-forms :items="roleItems" :selected="roleSelected" label="Seleccione El Rol" name="role"
         :onChange="onchangeModule" />
@@ -12,12 +13,13 @@
         Save
     </v-btn>
     {{ datos }}
+    </div>
 </template>
   
 <script>
 import CheckForms from '../inputs/CheckForms.vue'
 import ListBoxForms from '../inputs/ListBoxForms.vue'
-import * as srv from '@/service/ConfigPage'
+import * as srv from '@/services/admin/ConfigPageService'
 export default {
     components: { ListBoxForms, CheckForms },
     data: () => ({
@@ -35,7 +37,8 @@ export default {
     },
     methods: {
         async getData() {
-            const data = { app: this.appSelected, role: this.roleSelected, module: this.moduleSelected }
+            try {
+                const data = { app: this.appSelected, role: this.roleSelected, module: this.moduleSelected }
             console.log("***********", data)
             const datos = await srv.getRoleMod(data)
 
@@ -46,6 +49,10 @@ export default {
             this.moduleSelected = datos.moduleSelected
             this.moduleItems = datos.moduleItems
             this.moduleExist = datos.moduleExist
+            } catch (error) {
+                console.log(error);
+            };
+            
         },
         async onchangeModule(data) {
             this.datos = { ...this.datos, ...data }

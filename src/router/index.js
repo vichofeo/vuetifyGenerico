@@ -11,30 +11,55 @@ const routes = [
   {
     path: "/",
     name: "Login",
-    component: ()=>import(/* webpackChunkName: "about" */ "@/views/pagina/Login.vue")
+    component: () => import(/* webpackChunkName: "about" */ "@/views/pagina/Login.vue")
   },
   {
     path: "/about",
     name: "about",
-    component: () => import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),      
+    component: () => import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
   {
     path: '/georef',
     name: 'georeferencia',
-    component: ()=>import(/* webpackChunkName: "about" */ "@/layouts/LayoutGral.vue"),        
-    //beforeEnter: authGuard,
-    //meta: {requiereAuth: true},    
-    children:[
-      {path: ':idx',
-      name: 'geo',
-      component: ()=>import(/* webpackChunkName: "about" */ "@/views/modules/Georeferencia.vue"),
-      //beforeEnter: authGuard,
-    meta: {requiereAuth: true},
-    }
+    component: () => import(/* webpackChunkName: "about" */ "@/layouts/LayoutGral.vue"),
+    beforeEnter: authGuard,
+    meta: { requiereAuth: true },
+    children: [
+      {
+        path: ':idx',
+        name: 'geo',
+        component: () => import(/* webpackChunkName: "about" */ "@/views/modules/Georeferencia.vue"),
+        beforeEnter: authGuard,
+        meta: { requiereAuth: true },
+      }
     ]
   },
   { path: "*", component: () => import(/* webpackChunkName: "about" */ "../views/AboutView.vue") },
- 
+
+
+  {
+    path: '/admin',
+    name: 'administracion',
+    component: () => import(/* webpackChunkName: "about" */ "@/layouts/LayoutAdmin.vue"),
+    beforeEnter: authGuard,
+    meta: { requiereAuth: true },
+    children: [
+      {
+        path: 'modulos',
+        name: 'adminMod',
+        component: () => import(/* webpackChunkName: "about" */ "@/views/pageAdmin/AdminModulePages.vue"),
+        beforeEnter: authGuard,
+        meta: { requiereAuth: true },
+      },
+      {
+        path: 'pages',
+        name: 'adminPages',
+        component: () => import(/* webpackChunkName: "about" */ "@/views/pageAdmin/AdminModulePages.vue"),
+        beforeEnter: authGuard,
+        meta: { requiereAuth: true },
+      }
+    ]
+  },
 
 ]
 
