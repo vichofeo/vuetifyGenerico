@@ -55,16 +55,16 @@
 </template>
 
 <script>
-import * as people from "@/service/PeopleService";
+import * as people from "@/services/admin/PeopleService";
 import ListBox from "../formsUtils/ListBox.vue";
 import Persona from "../generics/Persona.vue";
 export default {
   components: { ListBox, Persona },
   data: () => ({
-    tipoSelected: { value: "-1", title: "-Sin Dato-" },
-    institucionSelected: { value: "-1", title: "-Sin Dato-" },
-    appSelected: { value: "-1", title: "-Sin Dato-" },
-    rolSelected: { value: "-1", title: "-Sin Dato-" },
+    tipoSelected: { value: "-1", text: "-Sin Dato-" },
+    institucionSelected: { value: "-1", text: "-Sin Dato-" },
+    appSelected: { value: "-1", text: "-Sin Dato-" },
+    rolSelected: { value: "-1", text: "-Sin Dato-" },
     tipoItems: [],
     institucionItems: [],
     appItems: [],
@@ -81,7 +81,8 @@ export default {
         appSelected: this.appSelected,
         rolSelected: this.rolSelected,
       };
-      const r = await people.getDataCnfcre(data);
+      const res = await people.getDataCnfcre(data);
+      const r = res.data
 
       this.tipoItems = r.tipo.tipoItems;
       this.datosCnf.tipo = this.tipoSelected = r.tipo.tipoSelected;

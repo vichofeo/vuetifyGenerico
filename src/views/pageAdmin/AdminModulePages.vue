@@ -1,6 +1,6 @@
 <template>
     <v-card class="mx-auto">
-        
+         
             
                 <v-tabs v-model="tab"  background-color="transparent" color="basil" grow>
                     <v-tabs-slider></v-tabs-slider>

@@ -2,7 +2,7 @@ export function authGuard(to, from, next) {
     try {
         const authUser = JSON.parse(atob(localStorage.getItem("token")))
 
-        if (!authUser && !authUser.access_token) {
+        if (!authUser && !authUser.access_token) {            
             next({
                 name: "Login"
             });

@@ -16,8 +16,26 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 //import i18n from './i18n'
 
+import kiContext from '@kiyoaki_w/vue-context'
+Vue.use(kiContext)
+
+import "leaflet/dist/leaflet.css";
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+
 import { VueMaskDirective } from 'v-mask'
 Vue.directive('mask', VueMaskDirective);
+
+
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faArrowRight, faArrowLeft, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons'
+library.add(faArrowRight, faArrowLeft, faArrowUp, faArrowDown)
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
 
 Vue.config.productionTip = false
 

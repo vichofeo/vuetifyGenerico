@@ -1,5 +1,5 @@
 export const urlbase = "http://localhost:3000";
-export const urllogin = urlbase + "/ingresar";
+
 
 export const getHeader = function () {
     try {
@@ -9,9 +9,10 @@ export const getHeader = function () {
             'Accept': 'application/json',
             'Authorization': 'bearer ' + auth.access_token
         }
-        return headers;
+        return headers
     } catch (error) {
-        localStorage.removeItem("token");
+        localStorage.removeItem("token")
+        //window.location.replace("/")
     }
 
 }
@@ -26,9 +27,10 @@ export const getHeaderFile = function () {
             'Content-Type': 'multipart/form-data',
             'Authorization': 'bearer ' + auth.access_token
         }
-        return headers;
+        return headers
     } catch (error) {
-        localStorage.removeItem("token");
+        localStorage.removeItem("token")
+        //window.location.replace("/")
     }
 
 }

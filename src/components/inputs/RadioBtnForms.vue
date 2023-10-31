@@ -1,12 +1,16 @@
 <template>
   <div>
     <v-row no-gutters>
-      <v-radio-group inline :label="items.label" v-model="dataModel">
+      <v-radio-group row  v-model="dataModel">
+        <template v-slot:label>
+        <div>{{items.label}}</div>
+      </template>
         <v-radio
           :label="obj.label"
           color="orange-darken-3"
           :value="obj.value"
           v-for="(obj, i) in items.options"
+          :key="name + 'radio' + i"
         ></v-radio>
       </v-radio-group>
       {{ dataModel }}

@@ -5,12 +5,8 @@
     <v-toolbar-title class="hidden-sm-and-down font-weight-light" v-text="$route.name" />
   
   
-  
-  
-  
-  
-    <div class="mx-3" />
-    <v-menu bottom left offset-y origin="top right" transition="scale-transition" v-for="(menu, title) in menus" :key="`item-${title}`">
+   <div class="mx-3" />AEB   
+    <v-menu bottom left offset-y origin="top right" transition="scale-transition" v-for="(menu, title) in menuOps" :key="`item-${title}`">
       <template v-slot:activator="{ attrs, on }">
         <v-btn class="ml-2" min-width="0" text v-bind="attrs" v-on="on">
           {{title}}
@@ -19,8 +15,8 @@
       <v-list :tile="false" nav>
         <v-row dense>
           <v-col cols="12" xs="12" sm="6" md="3" lg="4" xl="4" v-for="(opts, i) in menu" :key="`Subitem-${i}`">
-            <app-bar-item :to="opts.to">
-              {{ opts.title }}
+            <app-bar-item :to="opts.value">
+              {{ opts.text }}
             </app-bar-item>
           </v-col>
         </v-row>
@@ -37,10 +33,9 @@
 // Components
 import { VHover, VListItem } from "vuetify/lib";
 
-
+import * as srv from '@/services/ssepi/mOpsService'
 export default {
   name: "DashboardCoreAppBar",
-
   components: {
     AppBarItem: {
       render(h) {
@@ -74,19 +69,19 @@ export default {
 
 
   data: () => ({
-    
+    menuOps:[],
     menus:{
       georeferencia :  [
-      { title: "Todos", to: '/georef/all' },
-      { title: "op1", to: '/georef/la paz' },
-      { title: "op2", to: '/georef/santa cruz' },
-      { title: "op3", to: '/georef/oruro' },
-      { title: "op4", to: '/georef/potosi' },
-      { title: "op4", to: '/georef/cochabamba' },
-      { title: "op6", to: '/georef/beni' },
-      { title: "op7", to: '/georef/pando' },
-      { title: "op8", to: '/georef/chuquisaca' },
-      { title: "op9", to: '/georef/tarija' }
+      { title: "Todos", to: '/ssepi/sssscp/all' },
+      { title: "op1", to: '/ssepi/sssscp/la paz' },
+      { title: "op2", to: '/ssepi/sssscp/santa cruz' },
+      { title: "op3", to: '/ssepi/sssscp/oruro' },
+      { title: "op4", to: '/ssepi/sssscp/potosi' },
+      { title: "op4", to: '/ssepi/sssscp/cochabamba' },
+      { title: "op6", to: '/ssepi/sssscp/beni' },
+      { title: "op7", to: '/ssepi/sssscp/pando' },
+      { title: "op8", to: '/ssepi/sssscp/chuquisaca' },
+      { title: "op9", to: '/ssepi/sssscp/tarija' }
     ],
     Reportes:  [
       { title: "Todos", to: '/' },
@@ -142,7 +137,15 @@ export default {
 
 
   methods: {
+async getMops(){
+  const result =  await srv.getMenuGeoRef()
+  this.menuOps = result.data
+  
+}
+  },
 
+  mounted() {
+   this.getMops()
   },
 };
 </script>

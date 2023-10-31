@@ -1,4 +1,5 @@
 <template>
+<div>
   <v-row no-gutters dense>
     <v-col cols="12" xs="12" sm="8" md="10" lg="10" xl="10">
       <v-card class="mx-auto" color="grey-lighten-3" >
@@ -9,17 +10,17 @@
             density="compact"
             variant="solo"
             label="Doc. Identidad - Compl"
-            append-inner-icon="mdi-magnify"
+            append-icon="mdi-magnify"
             single-line
             hide-details
-            @click:append-inner="searchPeople"
+            @click:append="searchPeople"
             clearable
           ></v-text-field>
         </v-card-text>
       </v-card>
     </v-col>
   </v-row >
-    <v-row no-gutters dense v-if="!mensaje">
+    <v-row no-gutters dense v-if="sw">
     <v-col cols="3" xs="12" sm="6" md="4" lg="3" xl="3">
       <v-text-field
         v-model="persona.primer_apellido"
@@ -75,9 +76,10 @@
       />
     </v-col>
     <v-col cols="3" xs="12" sm="6" md="4" lg="3" xl="3">
+      
       <calendar-forms label="Fecha de Nacimiento" :yyyymmdd="persona.fecha_nacimiento" :setFunction="setLugar" name="fecha_nacimiento"/>
     </v-col>
-    <v-col cols="3" xs="12" sm="6" md="4" lg="3" xl="3">
+    <v-col cols="3" xs="12" sm="6" md="4" lg="3" xl="3">      
       <lugar-pais :set-lugar="setLugar" name="lugar" :selected="lugarSelected"/>
     </v-col>
     <v-col cols="3" xs="12" sm="6" md="4" lg="3" xl="3">
@@ -110,6 +112,7 @@
 {{ mensaje }}
   </div>
   
+</div>
 </template>
 
 <script>
@@ -117,7 +120,7 @@ import RadioBtnForms from "../inputs/RadioBtnForms.vue";
 import LugarPais from "./LugarPais.vue";
 import CalendarForms from "@/components/inputs/CalendarForms.vue"
 
-import * as people from "@/service/PeopleService"
+import * as people from "@/services/admin/PeopleService"
 
 export default {
   props:{
@@ -152,6 +155,7 @@ export default {
     },
     lugarSelected: {p:"-1", d:"-1", m:"-1"},
     loading: false,
+    sw:false
   }),
 
   methods: {
@@ -163,12 +167,14 @@ export default {
    async searchPeople(){
     this.loading = true
     const result = await people.searchPeople({dni_persona: this.persona.dni_persona})
-    if(result.status){
-      this.mensaje = null
-      this.persona = result.mensaje
-      this.lugarSelected= {p:result.mensaje.cod_pais, d:result.mensaje.cod_dpto, m:result.mensaje.cod_municipio}
+    if(result.ok){
+      this.sw=true
+      this.mensaje = result.message
+      this.persona = result.data
+      this.lugarSelected= {p:result.data.cod_pais, d:result.data.cod_dpto, m:result.data.cod_municipio}
     }else{
-      this.mensaje = result.mensaje
+      this.sw=false
+      this.mensaje = result.message
       this.persona = {}
     }
 

@@ -1,27 +1,38 @@
-<template>  
-  <v-combobox variant="solo" v-model="select" :items="items" :label="label" density="compact"
-    @update:modelValue="onchangeHere">
+<template>
+  <v-combobox
+    v-model="select"
+    :items="items"
+    :label="label"
+    class="ml-auto"
+    dense
+    chips
+    @change="onchangeHere"
+  >
     <template v-slot:selection="data">
-      <v-chip variant="text" :key="JSON.stringify(data.item)" v-bind="data.attrs" :model-value="data.selected"
-        :disabled="data.disabled" size="small" @click:close="data.parent.selectItem(data.item)">
-        <template v-slot:prepend>
-          <v-avatar color="primary" class="bg-accent text-uppercase" start>{{
-            data.item.title.slice(0, 1)
-          }}</v-avatar>
-        </template>
-        {{ data.item.title }}
+      <v-chip
+        :key="JSON.stringify(data.item)"
+        v-bind="data.attrs"
+        :input-value="data.selected"
+        :disabled="data.disabled" 
+        @click:close="data.parent.selectItem(data.item.text)"
+      >
+        <v-avatar
+          class="accent white--text"
+          left
+          v-text="data.item.text?.slice(0, 1).toUpperCase()"
+        ></v-avatar>
+        {{ data.item.text }}
       </v-chip>
     </template>
   </v-combobox>
 </template>
 
 <script>
-
 export default {
   props: {
     name: { type: String, default: null },
     items: { type: Array, default: [] },
-    selected: { type: Object, default: () => { } },
+    selected: { type: Object, default: () => {} },
     label: { type: String, default: "Unknow" },
     onChange: {
       type: Function,
@@ -32,17 +43,16 @@ export default {
   },
 
   data: () => ({
-    select: {}
+    select: {},
   }),
   methods: {
     onchangeHere() {
-      if(this.name)
-      this.onChange({[`${this.name}`]:this.select})
-      else this.onChange(this.select)
-    }
+      if (this.name) this.onChange({ [`${this.name}`]: this.select });
+      else this.onChange(this.select);
+    },
   },
   mounted() {
-    this.onchangeHere()
+    this.onchangeHere();
   },
   watch: {
     selected: {

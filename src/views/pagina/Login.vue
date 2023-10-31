@@ -75,7 +75,7 @@ export default {
   data() {
     return {
       usuario: {    
-        login: 'sadmin'   ,
+        login: 'vico'   ,
         password: 'sadmin'
       },
       loading: false,
@@ -110,7 +110,7 @@ export default {
           /**
            * redireccion en funcion al rol ganado
            */
-          vm.$router.push({ name: "adminMod" });
+          vm.$router.push({ name: "ssepi" });
           
         } else {
           vm.error = true;

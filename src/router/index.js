@@ -18,17 +18,19 @@ const routes = [
     name: "about",
     component: () => import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
+
+  //modulo de la sala situacional geo referenciacion 
   {
-    path: '/georef',
-    name: 'georeferencia',
-    component: () => import(/* webpackChunkName: "about" */ "@/layouts/LayoutGral.vue"),
+    path: '/ssepi',
+    name: 'SalaSituacional',
+    component: () => import(/* webpackChunkName: "about" */ "@/layouts/LayoutSsepi.vue"),
     beforeEnter: authGuard,
     meta: { requiereAuth: true },
     children: [
       {
-        path: ':idx',
-        name: 'geo',
-        component: () => import(/* webpackChunkName: "about" */ "@/views/modules/Georeferencia.vue"),
+        path: 'sssscp/:idx',
+        name: 'ssepi',
+        component: () => import(/* webpackChunkName: "about" */ "@/views/ssepi/modules/Georeferencia.vue"),
         beforeEnter: authGuard,
         meta: { requiereAuth: true },
       }
@@ -36,7 +38,7 @@ const routes = [
   },
   { path: "*", component: () => import(/* webpackChunkName: "about" */ "../views/AboutView.vue") },
 
-
+//modulo de administracion
   {
     path: '/admin',
     name: 'administracion',
@@ -54,7 +56,7 @@ const routes = [
       {
         path: 'pages',
         name: 'adminPages',
-        component: () => import(/* webpackChunkName: "about" */ "@/views/pageAdmin/AdminModulePages.vue"),
+        component: () => import(/* webpackChunkName: "about" */ "@/views/pageAdmin/AdminUserLicences.vue"),
         beforeEnter: authGuard,
         meta: { requiereAuth: true },
       }
