@@ -2,58 +2,59 @@
   <div>
     <v-row>
       <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12">
-        <div
-          style="
-            height: 91vh;
-            width: 100%;
-            vertical-align: middle;
-            align-items: center;
-            position: fixed;
-            top: 50px;
-          "
-        >
-          <l-map
-            :zoom="zoom"
-            :center="center"
-            :options="mapOptions"
-            :bounds="bounds"
-            style="height: 100vh; z-index: 0"
-            @update:center="centerUpdate"
-            @update:zoom="zoomUpdate"
-            :key="forceRender"
-          >
+        <div style="
+              height: 91vh;
+              width: 100%;
+              vertical-align: middle;
+              align-items: center;
+              position: fixed;
+              top: 50px;
+            ">
+          <div class="columns float">
+            <div class="column is-flex is-justify-content-center">
+              <v-bottom-navigation color="teal" background-color="rgba(200, 200, 200, 0.6)">
+                <v-btn @click="switcheaIconosHospitales('all')" v-if="inst.nombre_corto">
+                  <span>Todos: {{ eess.length }}</span>
+                  <v-avatar class="profile" left size="40">
+                    <v-img :src="'/img/'+ inst.nombre_corto.toLowerCase() +'.png'"></v-img>
+                  </v-avatar>
+                </v-btn>
+                <v-btn @click="switcheaIconosHospitales(i)" x-small v-for="(nivel, i) in labels.niveles" :key="'img' + i"
+                  v-show="niveles">
+                  <span>{{ nivel }}: {{ niveles[i].length }}</span>
+                  <v-avatar class="profile" left size="35">
+                    <v-img :src="ICONS[i]"></v-img>
+                  </v-avatar>
+                </v-btn>
+              </v-bottom-navigation>
+            </div>
+          </div>
+  
+          <l-map :zoom="zoom" :center="center" :options="mapOptions" :bounds="bounds" style="height: 100vh; z-index: 0"
+            @update:center="centerUpdate" @update:zoom="zoomUpdate" :key="forceRender">
             <l-tile-layer :url="mapUrl" />
-
+  
             <!--
-              l-geo-json :geojson="primaryCoord" :options-style="primaryStyles()" :key="uuid()" /
-              -->
-            <l-marker
-              v-for="(icon, index) in eess"
-              :key="icon.idx"
-              :visible="icon.visible"
-              :draggable="icon.draggable"
-              :lat-lng.sync="icon.coordenadas"
-              @dblclick="inner2Click(icon, index)"
-              @click.right ="inner1Click(icon, index)"
-            >
-              <l-icon
-                :icon-size="[ICON_SIZE.normal, ICON_SIZE.normal]"
-                :icon-anchor="[ICON_SIZE.normal / 2, ICON_SIZE.normal]"
-                :icon-url="ICONS[icon.nivel_atencion]"
-                :data-id="uuid()"
-                :data-status="false"
-              />
+                l-geo-json :geojson="primaryCoord" :options-style="primaryStyles()" :key="uuid()" /
+                -->
+            <l-marker v-for="(icon, index) in establecimientos" :key="icon.idx" :visible="icon.visible"
+              :draggable="icon.draggable" :lat-lng.sync="icon.coordenadas" @dblclick="inner2Click(icon, index)"
+              @click.right="inner1Click(icon, index)">
+              <l-icon :icon-size="[ICON_SIZE.normal, ICON_SIZE.normal]"
+                :icon-anchor="[ICON_SIZE.normal / 2, ICON_SIZE.normal]" :icon-url="ICONS[icon.nivel_atencion]"
+                :data-id="uuid()" :data-status="false" />
               <l-tooltip v-if="icon.opPopup" :key="uuid()">
                 {{ icon.nombre_institucion }} <br />
                 {{ icon.telefono }} {{ icon.direccion_web }} <br />
-                {{ icon.nombre_departamento }} {{ icon.zona_barrio }}
+                {{ icon.nombre_dpto }} - {{ icon.zona_barrio }} -
                 {{ icon.avenida_calle }} <br />
                 {{ icon.clase }} - {{ icon.nivel_atencion }}
                 <div v-if="!icon.sw">
                   <i>Doble click para editar ubicacion </i>
                 </div>
-                <div v-else><i>Doble click guardar nuevas coordenadas </i>
-                <span>Click derecho para editar</span>
+                <div v-else>
+                  <i>Doble click guardar nuevas coordenadas </i>
+                  <span>Click derecho para editar</span>
                 </div>
               </l-tooltip>
             </l-marker>
@@ -61,7 +62,7 @@
         </div>
       </v-col>
     </v-row>
-
+  
     <!-- ************ loader ************* -->
     <v-dialog v-model="swLoader" hide-overlay persistent width="300" style="z-index: 10">
       <v-card color="primary" dark>
@@ -71,9 +72,9 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-
+  
     <!-- ************* CRUD FRM -->
-    <frmDataGralCRUD v-model="dialog" :idx="idxDialog" :modelo="modelDialog" v-if="dialog"/>
+    <frmDataGralCRUD v-model="dialog" :idx="idxDialog" :modelo="modelDialog" v-if="dialog" />
   </div>
 </template>
 
@@ -95,11 +96,20 @@ import {
   LTooltip,
   LPopup,
 } from "vue2-leaflet";
-import FrmDataGralCRUD from '@/components/inputs/frmDataGralCRUD.vue';
+import FrmDataGralCRUD from "@/components/inputs/frmDataGralCRUD.vue";
 
 export default {
   name: "Georeferencia",
-  components: { LMap, LTileLayer, LGeoJson, LMarker, LIcon, LTooltip, LPopup, FrmDataGralCRUD },
+  components: {
+    LMap,
+    LTileLayer,
+    LGeoJson,
+    LMarker,
+    LIcon,
+    LTooltip,
+    LPopup,
+    FrmDataGralCRUD,
+  },
   data: () => ({
     frm: null,
 
@@ -111,14 +121,19 @@ export default {
     mapOptions: {
       zoomSnap: 0.5,
       maxZoom: 17,
-      minZoom: 2,
+      minZoom: 1,
     },
     mapUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     bounds: null,
 
     forceRender: uuid(),
     latLngEESS: [],
-    eess: {},
+    eess: [],
+    inst: {},
+    niveles: {},
+    labels: {},
+    keyNiveles: "all",
+    establecimientos: [],
     ICON_SIZE: {
       small: 16,
       normal: 32,
@@ -138,7 +153,9 @@ export default {
     },
     dialog: false,
     idxDialog: null,
-    modelDialog: "eess"
+    modelDialog: "eess",
+
+    opMalBienTodos: 1,
   }),
   mounted() {
     this.verifyOption();
@@ -148,7 +165,7 @@ export default {
   },
   methods: {
     iconDraggable(obj) {
-      this.eess = this.eess.map((o, index) => {
+      this.establecimientos = this.establecimientos.map((o, index) => {
         if (o.idx != obj.idx) {
           return {
             ...o,
@@ -160,7 +177,7 @@ export default {
       });
     },
     iconRestoreDraggable() {
-      this.eess = this.eess.map((o, index) => {
+      this.establecimientos = this.establecimientos.map((o, index) => {
         return {
           ...o,
           opPopup: false,
@@ -173,39 +190,35 @@ export default {
     innerClick(obj, index) {
       this.ctrlDblClick.clicks++;
       if (this.ctrlDblClick.clicks === 1) {
-        let self = this
-        this.ctrlDblClick.timer = setTimeout(function () {          
+        let self = this;
+        this.ctrlDblClick.timer = setTimeout(function () {
           self.ctrlDblClick.clicks = 0;
-          self.inner1Click(obj,index)
+          self.inner1Click(obj, index);
         }, this.ctrlDblClick.delay);
       } else {
         clearTimeout(this.ctrlDblClick.timer);
         this.ctrlDblClick.clicks = 0;
-        this.inner2Click(obj, index)           
+        this.inner2Click(obj, index);
       }
     },
     inner2Click(obj, index) {
-      
       //oculta iconos
-      this.eess[index].sw ? this.iconRestoreDraggable(): this.iconDraggable(obj);
+      this.establecimientos[index].sw ? this.iconRestoreDraggable() : this.iconDraggable(obj);
       //reorienta pantalla
       this.zoom = 7;
       this.bounds = latLngBounds([[obj.latitud, obj.longitud]]);
       //verifica estado de sw para edicion
-      
-      if (!this.eess[index].sw) {
+
+      if (!this.establecimientos[index].sw) {
         //envia para grabado
         this.grabaCoordenadas(obj);
       }
     },
 
     inner1Click(obj, index) {
-      
-      if (this.eess[index].sw) {        
-        this.idxDialog = this.eess[index].idx
-        this.dialog = true
-
-        
+      if (this.establecimientos[index].sw) {
+        this.idxDialog = this.establecimientos[index].idx;
+        this.dialog = true;
       } else {
         return;
       }
@@ -219,7 +232,7 @@ export default {
     async grabaCoordenadas(obj) {
       try {
         const result = await srv.postDataLatLngEess(obj);
-        
+
         this.obtieneDataLatLgn();
       } catch (error) {
         console.log(error);
@@ -229,7 +242,7 @@ export default {
       try {
         //centrea mapa
         this.centerMap = latLng(this.center[0], this.center[1]);
-        this.obtieneDataLatLgn();        
+        this.obtieneDataLatLgn();
       } catch (e) {
         console.log("error en la formacion y adquision de datos");
         console.log(e);
@@ -240,23 +253,36 @@ export default {
       else this.frm = "all";
     },
 
+    seteaObjPuntosMapa(ArrayObj) {
+      const o = ArrayObj.map((obj, i) => {
+        return {
+          ...obj,
+          coordenadas: latLng(obj.latitud, obj.longitud),
+          draggable: false,
+          visible: true,
+          opPopup: true,
+          sw: false,
+        };
+      });
+      return o
+    },
+
     async obtieneDataLatLgn() {
       try {
         const result = await srv.getDataLatLngEess(this.frm);
         if (result.ok) {
-          this.eess = result.data.map((obj, i) => {
-            return {
-              ...obj,
-              coordenadas: latLng(obj.latitud, obj.longitud),
-              draggable: false,
-              visible: true,
-              opPopup: true,
-              sw: false,
-            };
-          });
+          this.eess = result.data
           this.center = latLng(result.cnf.center[0], result.cnf.center[1]);
           this.zoom = result.cnf.zoom;
-          
+          this.inst = result.inst
+          this.niveles = result.niveles
+          this.labels = result.labels
+
+          console.log("llave niveles es:::", this.keyNiveles)
+          if(this.keyNiveles =='all')
+          this.establecimientos = this.seteaObjPuntosMapa(this.eess)
+        else this.establecimientos = this.seteaObjPuntosMapa(this.niveles[this.keyNiveles])
+
           this.forceRender = this.uuid();
         } else {
           console.log("sindatos");
@@ -269,23 +295,21 @@ export default {
     uuid() {
       uuid();
     },
-    async markerClick(obj, recargar) {
-      this.swLoader = true;
-      try {
-        console.log(obj);
-        alert("hizo clic");
-      } catch (e) {
-        console.log(e);
-      }
-      this.swLoader = false;
+
+    switcheaIconosHospitales(index) {
+      this.keyNiveles = index
+      if (index == 'all')
+        this.establecimientos = this.seteaObjPuntosMapa(this.eess)
+      else
+        this.establecimientos = this.seteaObjPuntosMapa(this.niveles[index])
     },
   },
   beforeRouteUpdate(to, from) {
     // just use `this`
     this.frm = to.params.idx;
+    this.keyNiveles = 'all'
     this.obtieneDataLatLgn();
   },
-  
 };
 </script>
 
@@ -304,9 +328,9 @@ body {
 
 .floatInfo {
   position: absolute;
-  top: 3%;
+  top: 1%;
 
-  left: 8%;
+  left: 5%;
   width: 17%;
   z-index: 2;
   background: rgba(200, 200, 200, 0.6);
@@ -315,12 +339,11 @@ body {
 
 .float {
   position: absolute;
-  top: 0;
-  right: 0;
-
+  top: -2%;
+  right: -1%;
   z-index: 1;
   background: rgba(200, 200, 200, 0.6);
-  box-shadow: 0 5px 8px 3px rgb(0 0 0 / 20%);
+  box-shadow: 0 5px 8px 3px rgb(0 0 0 / 10%);
 }
 
 button {
@@ -349,12 +372,14 @@ button {
 }
 
 .points {
+  font-size: 8px;
+  height: 19px;
   width: 80px;
   text-align: center;
   padding: 1px;
-  margin: 4px;
+  margin: 2px;
   color: #ffffff;
-  border-radius: 5px;
+  border-radius: 4px;
   user-select: none;
 }
 

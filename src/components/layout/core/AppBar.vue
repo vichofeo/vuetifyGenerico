@@ -5,16 +5,19 @@
     <v-toolbar-title class="hidden-sm-and-down font-weight-light" v-text="$route.name" />
   
   
-   <div class="mx-3" />AEB   
+   <div class="mx-3" />{{sigla}}   
     <v-menu bottom left offset-y origin="top right" transition="scale-transition" v-for="(menu, title) in menuOps" :key="`item-${title}`">
       <template v-slot:activator="{ attrs, on }">
-        <v-btn class="ml-2" min-width="0" text v-bind="attrs" v-on="on">
-          {{title}}
+        <v-btn class="ml-2" min-width="0" text v-bind="attrs" v-on="on"
+        @click="()=>{if(!Array.isArray(menu)) $router.push(menu.value).catch(()=>{}); }"
+        >
+          {{title}} 
         </v-btn>
       </template>
-      <v-list :tile="false" nav>
+      <v-list :tile="false" nav v-if="Array.isArray(menu)">
         <v-row dense>
-          <v-col cols="12" xs="12" sm="6" md="3" lg="4" xl="4" v-for="(opts, i) in menu" :key="`Subitem-${i}`">
+          <v-col cols="12" xs="12" sm="6" md="3" lg="4" xl="4" v-for="(opts, i) in menu" 
+          :key="`Subitem-${i}`">
             <app-bar-item :to="opts.value">
               {{ opts.text }}
             </app-bar-item>
@@ -69,6 +72,7 @@ export default {
 
 
   data: () => ({
+    sigla: "ASUSS",
     menuOps:[],
     menus:{
       georeferencia :  [
@@ -140,7 +144,7 @@ export default {
 async getMops(){
   const result =  await srv.getMenuGeoRef()
   this.menuOps = result.data
-  
+  this.sigla = result.moredata.institucion
 }
   },
 

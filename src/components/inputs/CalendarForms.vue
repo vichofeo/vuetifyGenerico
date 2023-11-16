@@ -44,6 +44,9 @@
 
 <script>
 import moment from "moment"
+/**
+ * input d calendario name, label, fechha inicial
+ */
 export default {
   props: {
     name: { type: String, default: "defaultCalendar" },

@@ -37,24 +37,25 @@ export default {
     props: {
         headers: { type: Array, default: [] },
         items: { type: Array, default: [] },
-        opColor: { type: Number, default: 0 },
-        expand: { type: Boolean, default: false }
+        opColor: { type: String, default: 'teal' },
+        expand: { type: Boolean, default: false },
+        itemsPerPage: {type:Number, default: 5}
     },
     data() {
         return {
             expanded: [],
             page: 1,
             pageCount: 0,
-            itemsPerPage: 5,
+            //itemsPerPage: 5,
             grillaColor: ['blue', 'teal', 'green', 'amber', 'orange', 'red']
         }
     },
     methods: {
         row_classes(item) {
-            return (item.idx % 2) ? "white" : this.grillaColor[this.opColor] + " lighten-5"
+            return (item.idx % 2) ? "white" : this.opColor + " lighten-5"
         },
         row_classesExpand(item) {
-            return (item.idx % 2) ? "white manito" : this.grillaColor[this.opColor] + " lighten-5 manito"
+            return (item.idx % 2) ? "white manito" : this.opColor + " lighten-5 manito"
         },
         viewExpand(item, event) {
             if (event.isExpanded) {
@@ -71,7 +72,7 @@ export default {
             return this.items.map((obj, i) => ({ ...obj, idx: i }))
         },
         datosHeaders() {
-            return this.headers.map(o => ({ ...o, class: `${this.grillaColor[this.opColor]} darken-2 font-weight-light white--text` }))
+            return this.headers.map(o => ({ ...o, class: `${this.opColor} darken-2 font-weight-light white--text` }))
         }
     }
 }

@@ -19,6 +19,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
 
+  {
+    path: "/hl7",
+    name: "hl7Prueba",
+    component: () => import(/* webpackChunkName: "about" */ "@/views/hl7.vue"),
+  },
+
   //modulo de la sala situacional geo referenciacion 
   {
     path: '/ssepi',
@@ -33,7 +39,15 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ "@/views/ssepi/modules/Georeferencia.vue"),
         beforeEnter: authGuard,
         meta: { requiereAuth: true },
+      },
+      {
+        path: 'weusers',
+        name: 'weuser',
+        component: () => import(/* webpackChunkName: "about" */ "@/views/ssepi/modules/WeUsers.vue"),
+        beforeEnter: authGuard,
+        meta: { requiereAuth: true },
       }
+
     ]
   },
   { path: "*", component: () => import(/* webpackChunkName: "about" */ "../views/AboutView.vue") },

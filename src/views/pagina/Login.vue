@@ -75,7 +75,7 @@ export default {
   data() {
     return {
       usuario: {    
-        login: 'vico'   ,
+        login: 'aorlp'   ,
         password: 'sadmin'
       },
       loading: false,

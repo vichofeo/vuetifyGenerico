@@ -15,3 +15,9 @@ export const getDataEess = async(data)=>{
     const res = await http().get(`api/geo/ssepi/${data.idx}/${data.modelo}`)
     return res.data
 }
+
+//datos para usuario
+export const getWeUsers = async ()=>{
+    const res = await http().get(`/api/geo/weusers`)
+    return res.data
+}
