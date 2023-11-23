@@ -28,7 +28,10 @@ import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { VueMaskDirective } from 'v-mask'
 Vue.directive('mask', VueMaskDirective);
 
-
+//toast
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
+Vue.use(Toast);
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'

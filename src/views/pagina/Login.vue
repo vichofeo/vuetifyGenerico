@@ -7,51 +7,26 @@
             <v-card class="elevation-1 pa-3">
               <v-card-text>
                 <div class="layout column align-center">
-                  <img
-                    src="img/logo.png"
-                    alt="Epidemiologia SSCP"
-                    width="180"
-                    height="180"
-                  />
+                  <img src="img/logo.png" alt="Epidemiologia SSCP" width="180" height="180" />
                   <h1 class="flex my-4 primary--text text-center">
                     Area Epidemiologia Bioestadistica
                   </h1>
                 </div>
                 <v-form>
-                  <v-text-field
-                    append-icon="mdi-account"
-                    name="login"
-                    label="Login"
-                    type="text"
-                    v-model="usuario.login"
-                    :error="error"
-                    :rules="[rules.required]"
-                  ></v-text-field>
-
-                  <v-text-field
-                    :type="hidePassword ? 'password' : 'text'"
-                    :append-icon="hidePassword ? 'mdi-eye-off' : 'mdi-eye'"
-                    name="password"
-                    label="Password"
-                    id="password"
-                    :rules="[rules.required]"
-                    v-model="usuario.password"
-                    :error="error"
-                    @click:append="hidePassword = !hidePassword"
-                  ></v-text-field>
+                  <v-text-field append-icon="mdi-account" name="login" label="Login" type="text" v-model="usuario.login"
+                    :error="error" :rules="[rules.required]"></v-text-field>
+  
+                  <v-text-field :type="hidePassword ? 'password' : 'text'"
+                    :append-icon="hidePassword ? 'mdi-eye-off' : 'mdi-eye'" name="password" label="Password" id="password"
+                    :rules="[rules.required]" v-model="usuario.password" :error="error"
+                    @click:append="hidePassword = !hidePassword"></v-text-field>
                 </v-form>
                 <p>{{ usuario }}</p>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-
-                <v-btn
-                  block
-                  color="primary"
-                  @click="ingresar()"
-                  :loading="loading"
-                  >Ingresar</v-btn
-                >
+  
+                <v-btn block color="primary" @click="ingresar()" :loading="loading">Ingresar</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -74,9 +49,10 @@ export default {
   },
   data() {
     return {
-      usuario: {    
-        login: 'aorlp'   ,
-        password: 'sadmin'
+      usuario: {
+        login: "aorlp",
+        //login: 'chapare'   ,
+        password: "sadmin",
       },
       loading: false,
       showResult: false,
@@ -103,15 +79,14 @@ export default {
         const result = await srv.login(vm.usuario);
         if (result.ok) {
           const dataSession = {
-              access_token: result.access_token,
-              usr: result.usuario,
-            };
+            access_token: result.access_token,
+            usr: result.usuario,
+          };
           localStorage.setItem("token", btoa(JSON.stringify(dataSession)));
           /**
            * redireccion en funcion al rol ganado
            */
           vm.$router.push({ name: "ssepi" });
-          
         } else {
           vm.error = true;
           vm.result = "Login o Password incorrecto.";
@@ -119,7 +94,8 @@ export default {
         }
       } catch (error) {
         console.log(error);
-        vm.result = "Ocurrio un error en el proceso. Comuniquese con el administrador de sistema";
+        vm.result =
+          "Ocurrio un error en el proceso. Comuniquese con el administrador de sistema";
         vm.showResult = true;
       }
     },

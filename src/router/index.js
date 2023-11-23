@@ -39,6 +39,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ "@/views/ssepi/modules/Georeferencia.vue"),
         beforeEnter: authGuard,
         meta: { requiereAuth: true },
+        props: true
       },
       {
         path: 'weusers',
@@ -46,7 +47,23 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ "@/views/ssepi/modules/WeUsers.vue"),
         beforeEnter: authGuard,
         meta: { requiereAuth: true },
-      }
+      },
+      {
+        path: 'eess/:idx',
+        name: 'eess',
+        component: () => import(/* webpackChunkName: "about" */ "@/views/ssepi/modules/Eess.vue"),
+        beforeEnter: authGuard,
+        meta: { requiereAuth: true },
+        props: true
+      },
+      {
+        path: 'report/:idx',
+        name: 'reports',
+        component: () => import(/* webpackChunkName: "about" */ "@/views/ssepi/modules/Reports.vue"),
+        beforeEnter: authGuard,
+        meta: { requiereAuth: true },
+        props: true
+      },
 
     ]
   },

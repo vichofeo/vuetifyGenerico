@@ -5,23 +5,23 @@
         <template>
           <v-card>
             <v-toolbar color="#6A76AB" dark flat>
-              <v-toolbar-title>{{ parametros.identificacion.valores.nombre_institucion }} - {{
-                parametros.identificacion.valores.ciudad }}
+              <v-toolbar-title>{{ parametros.Identificacion.valores.nombre_institucion }} - {{
+                parametros.Identificacion.valores.ciudad }}
                 <span v-show="swEditable">Editar</span> </v-toolbar-title>
-  
+
               <v-spacer></v-spacer>
-  
+
               <template v-slot:extension>
                 <v-tabs v-model="tab" align-with-title>
                   <v-tabs-slider color="yellow"></v-tabs-slider>
-  
+
                   <v-tab v-for="(item, index) in parametros" :key="index">
                     {{ index.replace("_", " ") }}
                   </v-tab>
                 </v-tabs>
               </template>
             </v-toolbar>
-  
+
             <v-tabs-items v-model="tab">
               <v-tab-item v-for="(item, index) in parametros" :key="index">
                 <v-card flat v-if="!Array.isArray(item.valores)">
@@ -32,21 +32,20 @@
                           :key="'srhTb' + nameObj">
                           <v-text-field v-model="item.valores[nameObj]" :label="obj[0]" :readonly="!obj[1]"
                             :filled="!obj[1]" :rounded="!obj[1]" dense v-if="obj[3] == 'T' && !obj[5]" />
-  
+
                           <combo-box-forms v-model="item.valores[nameObj].selected"
                             :items-combo="item.valores[nameObj].items" :label="obj[0]" :readonly="!obj[1]"
                             :filled="!obj[1]" :rounded="!obj[1]" dense hide-details :disable-lookup="true" flat
                             v-else-if="obj[3] == 'C' && item.valores[nameObj] && item.valores[nameObj].selected && !obj[5]" />
                           <CalendarForms :label="obj[0]" :name="nameObj" :yyyymmdd="item.valores[nameObj]"
-                            :set-function="()=> {}" 
-                            v-else-if="obj[3] == 'F' && !obj[5]" />
+                            :set-function="() => { }" v-else-if="obj[3] == 'F' && !obj[5]" />
                           <div v-else>
-                            
-                              <div class="font-weight-black">
-                                {{ obj[0] }}: 
-                              </div> <span v-if="obj[3] == 'T'">{{ item.valores[nameObj] }}</span>
-                              <span v-else > {{ item.valores[nameObj]?.selected?.text }}</span>
-                             
+
+                            <div class="font-weight-black">
+                              {{ obj[0] }}: {{ obj[5] }} 
+                            </div> <span v-if="obj[3] == 'T'">{{ item.valores[nameObj] }}</span>
+                            <span v-else> {{ item.valores[nameObj]?.selected?.text }}</span>
+
                           </div>
                         </v-col>
                       </v-row>
@@ -70,27 +69,26 @@
                 </v-card>
                 <div v-else>
                   <p>&nbsp;</p>
-                  <ContenedorCard
-                    :title="index"
-                    :color="`${colors[index]} darken-1`" icon="mdi-calendar-check">
+                  <ContenedorCard :title="index" :color="`${colors[index]} darken-1`" icon="mdi-calendar-check">
                     <div v-if="item.valores.length > 0">
-                        
-                        <table-data :headers="item.campos" :items="item.valores" :opColor="colors[index]" :items-per-page="10"/>
+
+                      <table-data :headers="item.campos" :items="item.valores" :opColor="colors[index]"
+                        :items-per-page="10" />
                     </div>
                     <div v-else>
-                        <contenedor-alert dark outlined border="bottom" color="grey darken-2" elevation="2" icon="mdi-alert"
-                            prominent >
-                            -Sin Dato-
-                        </contenedor-alert>
+                      <contenedor-alert dark outlined border="bottom" color="grey darken-2" elevation="2" icon="mdi-alert"
+                        prominent>
+                        -Sin Dato-
+                      </contenedor-alert>
                     </div>
-                </ContenedorCard>
+                  </ContenedorCard>
                 </div>
               </v-tab-item>
             </v-tabs-items>
           </v-card>
         </template>
-  
-  
+
+
       </v-card>
     </v-dialog>
     <loading :swLoading="swLoader" mensaje="Cargando Informacion, espere por favor..." />
@@ -105,11 +103,11 @@ import Loading from "../utils/Loading.vue";
 import ComboBoxForms from "./ComboBoxForms.vue";
 import CalendarForms from './CalendarForms.vue';
 
-import ContenedorCard  from '@/components/utils/ContenedorCard.vue'
+import ContenedorCard from '@/components/utils/ContenedorCard.vue'
 import TableData from "../utils/TableData.vue";
 
 export default {
-  components: { ContenedorAlert, Loading, ComboBoxForms, CalendarForms, TableData , ContenedorCard},
+  components: { ContenedorAlert, Loading, ComboBoxForms, CalendarForms, TableData, ContenedorCard },
   name: "AllEditions",
   props: {
     idx: { type: String, default: "-1" },
@@ -126,7 +124,7 @@ export default {
       mensajePopup: "",
       swLoader: false,
       tab: null,
-      colors:{Infraestructura:"teal", Mobiliario:"green", Equipamiento: "blue", Personal:"orange"}
+      colors: { Responsables:"indigo" , Infraestructura: "teal", Mobiliario: "green", Equipamiento: "blue", Personal: "blue-grey" }
     };
   },
 
