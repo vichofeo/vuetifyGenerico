@@ -65,11 +65,20 @@ const routes = [
         props: true
       },
 
+      {
+        path: 'miseess',
+        name: 'miseess',
+        component: () => import(/* webpackChunkName: "about" */ "@/views/ssepi/modules/MysEess.vue"),
+        beforeEnter: authGuard,
+        meta: { requiereAuth: true },
+        props: true
+      },
+
     ]
   },
   { path: "*", component: () => import(/* webpackChunkName: "about" */ "../views/AboutView.vue") },
 
-//modulo de administracion
+  //modulo de administracion
   {
     path: '/admin',
     name: 'administracion',
