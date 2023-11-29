@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import * as utils from "@/components/asegurado/utils/varios";
+import * as utils from "@/components/asegurado/utils/";
 export default {
   name: "ChipColorEstado",
   props: {

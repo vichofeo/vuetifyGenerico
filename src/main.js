@@ -33,6 +33,9 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 Vue.use(Toast);
 
+import VueSweetalert2 from 'vue-sweetalert2';
+Vue.use(VueSweetalert2)
+
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faArrowRight, faArrowLeft, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons'

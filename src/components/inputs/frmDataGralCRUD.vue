@@ -111,7 +111,7 @@ export default {
   name: "AllEditions",
   props: {
     idx: { type: String, default: "-1" },
-    modelo: { type: String, default: "eess" },
+    modelo: { type: String, default: "all" },
     value: { type: Boolean, default: false },
   },
   data() {

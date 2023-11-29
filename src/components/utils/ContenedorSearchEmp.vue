@@ -20,7 +20,7 @@
 </template>
 <script>
 
-import { optionsToast } from './toastOptions.js'
+import { optionsToast } from './MensajeriaUtils.js'
 
 
 import Loading from './Loading.vue'

@@ -90,7 +90,7 @@ import ComboBoxForms from "@/components/inputs/ComboBoxForms.vue";
 import CalendarForms from "@/components/inputs/CalendarForms.vue";
 import ContenedorAlert from "@/components/utils/ContenedorAlert.vue";
 
-import { optionsToast } from "@/components/utils/toastOptions";
+import { optionsToast } from "@/components/utils/MensajeriaUtils";
 
 export default {
   components: {
@@ -156,8 +156,7 @@ export default {
     async guardar() {
       const data = {};
       for (const key in this.datosBuscar.valores) {
-        if (
-          this.datosBuscar.valores[key] &&
+        if (this.datosBuscar.valores[key] &&
           typeof this.datosBuscar.valores[key] == "object"
         ) {
           data[key] = this.datosBuscar.valores[key].selected.value;

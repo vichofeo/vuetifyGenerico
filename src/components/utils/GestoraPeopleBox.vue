@@ -34,7 +34,7 @@
 
 <script>
 import SearchPeopleBox from './SearchPeopleBox.vue'
-import { optionsToast } from './toastOptions.js'
+import { optionsToast } from './MensajeriaUtils.js'
 import * as srv from "@/services/InteroperabilidadService";
 
 

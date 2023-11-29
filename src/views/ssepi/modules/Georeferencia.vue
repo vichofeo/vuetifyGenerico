@@ -153,7 +153,7 @@ export default {
     },
     dialog: false,
     idxDialog: null,
-    modelDialog: "eess",
+    modelDialog: "all",
 
     opMalBienTodos: 1,
   }),

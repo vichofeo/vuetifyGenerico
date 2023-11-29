@@ -21,6 +21,16 @@ export const getDataParamEess = async(data)=>{
     return res.data
 }
 
+export const getDataParamEessByIdx = async(data)=>{
+    const res = await http().post(`api/geo/eess/get`, data)
+    return res.data
+}
+export const saveDataParamEessByIdx = async(data)=>{
+    const res = await http().post(`api/geo/eess`, data)
+    return res.data
+}
+
+
 //datos para usuario
 export const getWeUsers = async ()=>{
     const res = await http().get(`/api/geo/weusers`)

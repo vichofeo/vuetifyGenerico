@@ -47,7 +47,7 @@ export default {
 
   mounted() {
     this.items = this.itemsCombo
-  },
+  }, 
   computed: {
     dataSelected: {
       get() {

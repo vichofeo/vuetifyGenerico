@@ -4,45 +4,57 @@
       User Directory
     </v-card-title>
     <v-row class="pa-4" justify="space-between">
-      <v-col cols="5">
-        <v-treeview
-          :active.sync="active"
-          :items="items"
-          :load-children="fetchUsers"
-          :open.sync="open"
-          activatable
-          color="warning"
-          open-on-click
-          transition
-        >
-          <template v-slot:prepend="{ item }">
-            <v-icon v-if="!item.children"> mdi-account </v-icon>
-          </template>
-        </v-treeview>
-        <v-divider></v-divider>
+      <v-col cols="12" xs="12" sm="12" md="4" lg="4" xl="5">
+        <v-sheet class="pa-4 primary lighten-2">
+          <v-text-field
+            v-model="search"
+            label="Buscar..."
+            dark
+            flat
+            solo-inverted
+            hide-details
+            clearable
+            clear-icon="mdi-close-circle-outline"
+          ></v-text-field>
+        </v-sheet>
+
         <v-treeview
           v-model="tree"
+          hoverable
+          rounded
+          color="success"
+          activatable
           :active.sync="activeTree"
           :items="items2"
-          activatable
-          item-key="name"
-          color="danger"
-          open-on-click
+          item-key="id"
+          return-object
           transition
+          :open.sync="open"
+          :search="search"
         >
           <template v-slot:prepend="{ item, open }">
-            <v-icon v-if="!item.file" color="teal">
-              {{ open ? "mdi-folder-open" : "mdi-folder" }}
+            <v-icon v-if="item.id == 1" color="teal">mdi-home-variant</v-icon>
+            <v-icon v-if="item.type == 'ASUSS'" color="teal"
+              >{{ open ? "mdi-minus-network" : "mdi-plus-network" }}
             </v-icon>
-            <v-icon v-else>
-                mdi-hospital
+            <v-icon v-if="item?.type == 'dpto'" color="teal">
+              {{ open ? "mdi-map-marker-minus" : "mdi-map-marker-plus" }}
             </v-icon>
+            <v-icon v-if="item?.type == 'EG'" color="teal">
+              {{ open ? "mdi-minus-box-outline" : "mdi-hospital-building" }}
+            </v-icon>
+            <v-icon v-if="item?.type == 'EESS'" color="red">
+              mdi-hospital</v-icon
+            >
+          </template>
+          <template v-slot:append="{ item, active }">
+            <v-icon v-if="item?.add && active" color="red">mdi-new-box</v-icon>
           </template>
         </v-treeview>
       </v-col>
 
       <v-divider vertical></v-divider>
-      {{ tree }}{{ activeTree }}
+
       <v-col class="d-flex text-center">
         <v-scroll-y-transition mode="out-in">
           <div
@@ -50,51 +62,80 @@
             class="text-h6 grey--text text--lighten-1 font-weight-light"
             style="align-self: center"
           >
-            Select a User
+            Elija una Opcion
           </div>
-          <v-card
-            v-else
-            :key="selected.id"
-            class="pt-6 mx-auto"
-            flat
-            max-width="400"
-          >
+          <v-card v-else :key="selected.idx" class="pt-6 mx-auto" flat>
             <v-card-text>
-              <v-avatar v-if="avatar" size="88">
+              <v-avatar size="88">
                 <v-img
-                  :src="`https://avataaars.io/${avatar}`"
-                  class="mb-6"
-                ></v-img>
+                  :src="`/img/${selected.nombre_corto}.png`"
+                  lazy-src="/img/asuss.png"
+                >
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular
+                        indeterminate
+                        color="grey lighten-5"
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
               </v-avatar>
               <h3 class="text-h5 mb-2">
-                {{ selected.name }}
+                {{
+                  selected.type == "EESS"
+                    ? selected.eg + " - " + selected.dpto
+                    : selected?.nombre_corto
+                    ? selected.nombre_corto
+                    : selected.name
+                }}
               </h3>
-              <div class="blue--text mb-2">
-                {{ selected.email }}
+              <div class="blue--text mb-2" v-if="selected.type == 'EESS'">
+                {{ selected.nombre_corto }}
               </div>
               <div class="blue--text subheading font-weight-bold">
-                {{ selected.username }}
+                {{ selected.nombre_institucion }}
               </div>
+          
+              <div class=" text-caption" v-if="selected?.add">
+              <v-btn class="ma-2" small text  color="red" @click="addItem(selected)">
+                <v-icon>mdi-new-box</v-icon>
+              </v-btn>
+            </div>
+          
             </v-card-text>
+            
             <v-divider></v-divider>
-            <v-row class="text-left" tag="v-card-text">
-              <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
-                Company:
+            <v-row class="text-left" v-if="selected.type != 'dpto' && !swNew">
+              <v-col class="text-right mr-4 mb-2" tag="strong" cols="6">
+                Institucion: 
               </v-col>
-              <v-col>{{ selected.company.name }}</v-col>
-              <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
+              <v-col>{{
+                selected.nombre_corto ? selected.nombre_corto : selected.name
+              }}</v-col>
+              <v-col class="text-right mr-4 mb-2" tag="strong" cols="6">
+                Departamento:
+              </v-col>
+              <v-col>{{ selected.egdpto }}</v-col>
+              <v-col class="text-right mr-4 mb-2" tag="strong" cols="6">
                 Website:
               </v-col>
               <v-col>
-                <a :href="`//${selected.website}`" target="_blank">{{
-                  selected.website
-                }}</a>
+                <a :href="`//${selected.website}`" target="_blank">WEBSITE</a>
               </v-col>
-              <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
+              <v-col class="text-right mr-4 mb-2" tag="strong" cols="6">
                 Phone:
               </v-col>
-              <v-col>{{ selected.phone }}</v-col>
+              <v-col>Telefono</v-col>
             </v-row>
+            <v-card-text  v-if="swNew">
+              <FrmbyModel idx="-1" modelo="eesseg" :root="selected" :recarga="recargar"></FrmbyModel>
+            </v-card-text>
+            
           </v-card>
         </v-scroll-y-transition>
       </v-col>
@@ -104,51 +145,37 @@
 
 <script>
 import * as srv from "@/services/ssepi/geoMisEess";
-const avatars = [
-  "?accessoriesType=Blank&avatarStyle=Circle&clotheColor=PastelGreen&clotheType=ShirtScoopNeck&eyeType=Wink&eyebrowType=UnibrowNatural&facialHairColor=Black&facialHairType=MoustacheMagnum&hairColor=Platinum&mouthType=Concerned&skinColor=Tanned&topType=Turban",
-  "?accessoriesType=Sunglasses&avatarStyle=Circle&clotheColor=Gray02&clotheType=ShirtScoopNeck&eyeType=EyeRoll&eyebrowType=RaisedExcited&facialHairColor=Red&facialHairType=BeardMagestic&hairColor=Red&hatColor=White&mouthType=Twinkle&skinColor=DarkBrown&topType=LongHairBun",
-  "?accessoriesType=Prescription02&avatarStyle=Circle&clotheColor=Black&clotheType=ShirtVNeck&eyeType=Surprised&eyebrowType=Angry&facialHairColor=Blonde&facialHairType=Blank&hairColor=Blonde&hatColor=PastelOrange&mouthType=Smile&skinColor=Black&topType=LongHairNotTooLong",
-  "?accessoriesType=Round&avatarStyle=Circle&clotheColor=PastelOrange&clotheType=Overall&eyeType=Close&eyebrowType=AngryNatural&facialHairColor=Blonde&facialHairType=Blank&graphicType=Pizza&hairColor=Black&hatColor=PastelBlue&mouthType=Serious&skinColor=Light&topType=LongHairBigHair",
-  "?accessoriesType=Kurt&avatarStyle=Circle&clotheColor=Gray01&clotheType=BlazerShirt&eyeType=Surprised&eyebrowType=Default&facialHairColor=Red&facialHairType=Blank&graphicType=Selena&hairColor=Red&hatColor=Blue02&mouthType=Twinkle&skinColor=Pale&topType=LongHairCurly",
-];
-
-const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+import FrmbyModel from '@/components/inputs/FrmbyModel.vue';
 
 export default {
+  components: { FrmbyModel },
   data: () => ({
     active: [],
     avatar: null,
-    open: [],
+
     users: [],
 
-    initiallyOpen: ["public"],
-  
+    initiallyOpen: [1],
+
     tree: [],
     items2: [],
     activeTree: [],
+
+    search: null,
+    open: [1, 2],
+
+    swNew: false
+    
   }),
 
   computed: {
-    items() {
-      return [
-        {
-          name: "Users",
-          children: this.users,
-        },
-      ];
-    },
     selected() {
-      if (!this.active.length) return undefined;
-
-      const id = this.active[0];
-
-      return this.users.find((user) => user.id === id);
+      if (!this.activeTree.length) return undefined;
+      this.swNew =  false
+      return this.activeTree[0];
     },
   },
 
-  watch: {
-    selected: "randomAvatar",
-  },
   mounted() {
     this.initial();
   },
@@ -156,20 +183,18 @@ export default {
     async initial() {
       try {
         const result = await srv.getDataMiseess();
-        this.items2 =  result.data
+        this.items2 = result.data;
       } catch (error) {
         console.log(error);
       }
     },
-    async fetchUsers(item) {
-      return fetch("https://jsonplaceholder.typicode.com/users")
-        .then((res) => res.json())
-        .then((json) => item.children.push(...json))
-        .catch((err) => console.warn(err));
+    addItem() {
+      this.swNew = true
+      
     },
-    randomAvatar() {
-      this.avatar = avatars[Math.floor(Math.random() * avatars.length)];
-    },
+    recargar(sw){
+      if(sw) this.initial()
+    }
   },
 };
 </script>

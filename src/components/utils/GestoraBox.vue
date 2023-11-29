@@ -10,7 +10,7 @@
 
 <script>
 
-import { optionsToast } from './toastOptions.js'
+import { optionsToast } from './MensajeriaUtils.js'
 import * as srv from "@/services/InteroperabilidadService";
 
 import Loading from './Loading.vue'

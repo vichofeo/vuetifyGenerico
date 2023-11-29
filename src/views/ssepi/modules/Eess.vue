@@ -2,68 +2,12 @@
     <div>
         <p>&nbsp;</p>
         <ContenedorCard color="teal dark-1" :title="titulo" :image="true">            
-            <div v-for="(item, index) in parametros" :key="index" v-if="parametros" >
-                <v-card flat v-if="!Array.isArray(item.valores)">
-                    <v-card-text>
-                        <v-container>
-                            <v-row>
-                                <v-col cols="12" xs="12" sm="12" md="6" xl="3" lg="3" v-for="(obj, nameObj) in item.campos"
-                                    :key="'srhTb' + nameObj">
-                                    <v-text-field v-model="item.valores[nameObj]" :label="obj[0]" :readonly="!obj[1]"
-                                        :filled="!obj[1]" :rounded="!obj[1]" dense v-if="obj[3] == 'T' && !obj[5]" />
-    
-                                    <combo-box-forms v-model="item.valores[nameObj].selected"
-                                        :items-combo="item.valores[nameObj].items" :label="obj[0]" :readonly="!obj[1]"
-                                        :filled="!obj[1]" :rounded="!obj[1]" dense hide-details :disable-lookup="true" flat
-                                        v-else-if="obj[3] == 'C' && item.valores[nameObj] && item.valores[nameObj].selected && !obj[5]" />
-                                    <CalendarForms :label="obj[0]" :name="nameObj" :yyyymmdd="item.valores[nameObj]"
-                                        :set-function="()=> {}" v-else-if="obj[3] == 'F' && !obj[5]" />
-                                    <div v-else>
-    
-                                        <div class="font-weight-black">
-                                            {{ obj[0] }}:
-                                        </div> <span v-if="obj[3] == 'T'">{{ item.valores[nameObj] }}</span>
-                                        <span v-else> {{ item.valores[nameObj]?.selected?.text }}</span>
-    
-                                    </div>
-                                </v-col>
-                            </v-row>
-                        </v-container>
-                    </v-card-text>
-                    <v-card-text v-show="mensajePopup">
-                        <contenedor-alert dark outlined border="bottom" color="grey darken-2" elevation="2" icon="mdi-alert"
-                            prominent>
-                            {{ mensajePopup }}
-                        </contenedor-alert>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="blue darken-1" text @click="$emit('input', false)">
-                            Cancel
-                        </v-btn>
-                        <v-btn color="blue darken-1" text @click="saveItem" v-show="swEditable">
-                            Grabar
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-                <div v-else>
-                    <p>&nbsp;</p>
-                    <ContenedorCard :title="index" :color="`${colors[index]} darken-1`" icon="mdi-calendar-check">
-                        <div v-if="item.valores.length > 0">
-    
-                            <table-data :headers="item.campos" :items="item.valores" :opColor="colors[index]"
-                                :items-per-page="10" />
-                        </div>
-                        <div v-else>
-                            <contenedor-alert dark outlined border="bottom" color="grey darken-2" elevation="2"
-                                icon="mdi-alert" prominent>
-                                -Sin Dato-
-                            </contenedor-alert>
-                        </div>
-                    </ContenedorCard>
-                </div>
-            </div>
-    
+                        
+            <FrmModelElements
+            v-model="parametros[indexParam]"
+            :lengthCols="4" :index-param="indexParam"
+            v-if="indexParam"
+          />
         </ContenedorCard>
     </div>
 </template>
@@ -77,11 +21,12 @@ import TableData from "@/components/utils/TableData.vue";
 import Loading from "@/components/utils/Loading.vue";
 import ComboBoxForms from "@/components/inputs/ComboBoxForms.vue";
 import CalendarForms from '@/components/inputs/CalendarForms.vue';
+import FrmModelElements from '@/components/inputs/FrmModelElements.vue';
 
 
 
 export default {
-  components: { ContenedorCard, ContenedorAlert, TableData, Loading, ComboBoxForms, CalendarForms },
+  components: { ContenedorCard, ContenedorAlert, TableData, Loading, ComboBoxForms, CalendarForms, FrmModelElements },
   name: "MiEstablecimientoSalud",
 
   data: () => ({
@@ -90,7 +35,8 @@ export default {
     swEditable: 0,
     mensajePopup: false,
     colors:{Infraestructura:"teal", Mobiliario:"green", Equipamiento: "blue", Personal:"orange"},
-    titulo: ""
+    titulo: "",
+    indexParam: null
 
   }),
   mounted() {
@@ -102,7 +48,8 @@ export default {
       try {
          const results = await srv.getDataParamEess(this.frm);
          this.parametros = results.data
-        this.titulo = results.institucion.nombre_institucion + ': ' + Object.keys(this.parametros)
+         this.indexParam =  Object.keys(this.parametros)[0]
+        this.titulo = results.institucion.nombre_institucion + ': ' + this.indexParam
         
       } catch (e) {
         console.log("error en la formacion y adquision de datos");

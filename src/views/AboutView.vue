@@ -1,5 +1,7 @@
 <template>
     <v-container id="dashboard" fluid tag="section">
+<CalendarForms v-model="mifecha" label="Longaniza" :yyyymmdd="mifecha"></CalendarForms>
+<p>la fecha modifica es {{ mifecha }}</p>
         <br />
         <v-row>
             <v-col cols="12" lg="4">
@@ -149,13 +151,15 @@
     
 <script>
 import ContenedorCard from '@/components/utils/ContenedorCard.vue'
+import CalendarForms from '@/components/inputs/CalendarForms.vue'
 
 export default {
-    components: { ContenedorCard },
+    components: { ContenedorCard, CalendarForms },
     name: 'DashboardDashboard',
 
     data() {
         return {
+            mifecha: null,
             dailySalesChart: {
                 data: {
                     labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
