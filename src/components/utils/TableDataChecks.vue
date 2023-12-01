@@ -1,7 +1,7 @@
 <template>
     <div v-if="items && headers">
         <v-data-table :headers="datosHeaders" :items="datos" v-model="itemSelected"
-        item-key="idx" 
+        item-key="idl" 
         :item-class="row_classes" 
         :page.sync="page"
         :items-per-page="itemsPerPage" 
@@ -40,10 +40,10 @@ export default {
     },
     methods: {
         row_classes(item) {
-            return (item.idx % 2) ? "white" : this.opColor + " lighten-5"
+            return (item.idl % 2) ? "white" : this.opColor + " lighten-5"
         },
         row_classesExpand(item) {
-            return (item.idx % 2) ? "white manito" : this.opColor + " lighten-5 manito"
+            return (item.idl % 2) ? "white manito" : this.opColor + " lighten-5 manito"
         },
         viewExpand(item, event) {
             if (event.isExpanded) {
@@ -57,7 +57,7 @@ export default {
     },
     computed: {
         datos() {
-            return this.items.map((obj, i) => ({ ...obj, idx: i }))
+            return this.items.map((obj, i) => ({ ...obj, idl: i }))
         },
         datosHeaders() {
             return this.headers.map(o => ({ ...o, class: `${this.opColor} darken-2 font-weight-light white--text` }))

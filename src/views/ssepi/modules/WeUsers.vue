@@ -90,7 +90,7 @@ import ComboBoxForms from "@/components/inputs/ComboBoxForms.vue";
 import CalendarForms from "@/components/inputs/CalendarForms.vue";
 import ContenedorAlert from "@/components/utils/ContenedorAlert.vue";
 
-import { optionsToast } from "@/components/utils/MensajeriaUtils";
+import MensajeriaUtils from "@/components/utils/MensajeriaUtils";
 
 export default {
   components: {
@@ -154,7 +154,9 @@ export default {
       }
     },
     async guardar() {
-      const data = {};
+      const mensaje = new MensajeriaUtils(this.$toast)
+      try {
+        const data = {};
       for (const key in this.datosBuscar.valores) {
         if (this.datosBuscar.valores[key] &&
           typeof this.datosBuscar.valores[key] == "object"
@@ -176,19 +178,21 @@ export default {
         //this.init()
         this.datosBuscar = [];
         this.itemSelected = [];
-        this.showInfo(results.message);
-      } else this.showError("Ocurrio un error. " + results.message);
+        mensaje.setMensaje(results.message)
+        mensaje.informacion()
+      } else {
+        mensaje.setMensaje("Ocurrio un error. " + results.message)
+        mensaje.advertencia()
+      }
+      } catch (error) {
+          console.log(error);
+          mensaje.setMensaje("Error de interface FRMDLEL, comuniquese con si administrador")
+          mensaje.error()
+      };
+      
     },
 
-    showAdvertencia(mensaje) {
-      this.$toast.warning(mensaje, optionsToast);
-    },
-    showInfo(mensaje) {
-      this.$toast.info(mensaje, optionsToast);
-    },
-    showError(mensaje) {
-      this.$toast.error(mensaje, optionsToast);
-    },
+    
   },
   mounted() {
     this.init();

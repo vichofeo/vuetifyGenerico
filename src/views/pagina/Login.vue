@@ -87,6 +87,7 @@ export default {
            * redireccion en funcion al rol ganado
            */
           vm.$router.push({ name: "ssepi" });
+          
         } else {
           vm.error = true;
           vm.result = "Login o Password incorrecto.";

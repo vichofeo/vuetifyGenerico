@@ -1,69 +1,67 @@
 <template>
-  <v-row v-if="!Array.isArray(item.valores)">
-    <v-col
-      cols="12"
-      xs="12"
-      sm="12"
-      md="6"
-      :xl="lengthCols"
-      :lg="lengthCols"
-      v-for="(obj, nameObj) in item.campos"
-      :key="'srhTb' + nameObj"
-    >
-      <v-text-field
-        v-model="item.valores[nameObj]"
-        :label="obj[0]"
-        :readonly="!obj[1]"
-        :filled="!obj[1]"
-        :rounded="!obj[1]"
-        dense
-        v-if="obj[3] == 'T' && !obj[5]"
-      />
-
-      <combo-box-forms
-        v-model="item.valores[nameObj].selected"
-        :items-combo="item.valores[nameObj].items"
-        :label="obj[0]"
-        :readonly="!obj[1]"
-        :filled="!obj[1]"
-        :rounded="!obj[1]"
-        dense
-        hide-details
-        :disable-lookup="true"
-        flat
-        v-else-if="
-          obj[3] == 'C' &&
-          item.valores[nameObj] &&
-          item.valores[nameObj].selected &&
-          !obj[5]
-        "
-      />
-      <CalendarForms
-        v-model="item.valores[nameObj]"
-        :label="obj[0]"
-        :name="nameObj"
-        v-else-if="obj[3] == 'F' && !obj[5]"
-      />
-      <div v-else>
-        <div class="font-weight-black">{{ obj[0] }}:</div>
-        <span v-if="obj[3] == 'T'">
-          {{ item.valores[nameObj] }} {{ obj[5] }}</span
-        >
-        <span v-else> {{ item.valores[nameObj]?.selected?.text }}</span>
-      </div>
-    </v-col>
-  </v-row>
+  <div v-if="!Array.isArray(item.valores)">
+    <FrmModelElementsBasics
+      v-model="item"
+      :lengthCols="lengthCols"
+    ></FrmModelElementsBasics>
+  </div>
 
   <div v-else>
-    <div v-if="item.valores.length > 0">
+    <div v-if="item.valores.length >= 0">
       <table-data
         :headers="item.campos"
         :items="item.valores"
         :opColor="colors[indexParam]"
         :items-per-page="10"
-      />{{ itemSelected }}
-      <TableDataEdit :headers="item.campos" :items="item.valores" :opColor="'blue'" v-model="itemSelected"
-                    :itemsPerPage="10"/>
+        v-if="!forEdit"
+      />
+      <v-row v-else>
+        <v-col cols="12" xs="12" sm="12" md="6" xl="6" lg="6">
+          <TableDataEdit
+            :headers="item.campos"
+            :items="item.valores"
+            :opColor="colors[indexParam]"
+            v-model="itemSelected"
+            :itemsPerPage="10"
+          />
+        </v-col>
+        <v-col cols="12" xs="12" sm="12" md="6" xl="6" lg="6">
+          <v-card>
+            <v-card-text class="font-weight-black"
+              >Formulario de Datos Seleccione un Registro o presione el boton
+              Nuevo
+              <v-divider vertical></v-divider>
+              <v-btn small outlined color="primary" @click="newReg">
+                <v-icon left> mdi-bookmark-plus </v-icon>
+                Nuevo
+              </v-btn>
+            </v-card-text>
+            <v-card-text>
+              <FrmModelElementsBasics
+                v-model="datosSelected[indexDatosSelected]"
+                :lengthCols="lengthCols"
+                v-if="datosSelected"
+              ></FrmModelElementsBasics>
+            </v-card-text>
+            <v-card-actions v-if="datosSelected[indexDatosSelected]">
+              <v-btn
+                small
+                outlined
+                color="success"
+                @click="saveItem"
+                v-if="swModificar"
+              >
+                <v-icon left> mdi-content-save-all </v-icon>
+                Guardar Modificaciones
+              </v-btn>
+              <v-btn small outlined color="primary" @click="saveItem" v-else>
+                <v-icon left> mdi-content-save </v-icon>
+                Guardar Nuevo Dato
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
     </div>
     <div v-else>
       <contenedor-alert
@@ -90,6 +88,12 @@ import Loading from "@/components/utils/Loading.vue";
 import ComboBoxForms from "@/components/inputs/ComboBoxForms.vue";
 import CalendarForms from "@/components/inputs/CalendarForms.vue";
 
+import * as srv from "@/services/ssepi/geoRefDataService";
+import * as utils from "@/components/utils/utils";
+
+import MensajeriaUtils from "../utils/MensajeriaUtils";
+import FrmModelElementsBasics from "./FrmModelElementsBasics.vue";
+
 export default {
   components: {
     ContenedorAlert,
@@ -97,9 +101,22 @@ export default {
     Loading,
     ComboBoxForms,
     CalendarForms,
-    TableDataEdit
+    TableDataEdit,
+    FrmModelElementsBasics,
   },
   name: "FrmByModelElements",
+  props: {
+    value: { type: Object, default: {} },
+    lengthCols: { type: Number, default: 3 },
+    indexParam: { type: String, default: "Responsables" },
+    forEdit: { type: Boolean, default: false },
+    recarga: {
+      type: Function,
+      default() {
+        return null;
+      },
+    },
+  },
   data() {
     return {
       colors: {
@@ -110,12 +127,10 @@ export default {
         Personal: "blue-grey",
       },
       itemSelected: [],
+      datosSelected: {},
+      indexDatosSelected: null,
+      swModificar: false,
     };
-  },
-  props: {
-    value: { type: Object, default: {} },
-    lengthCols: { type: Number, default: 3 },
-    indexParam: { type: String, default: "Responsables" },
   },
 
   computed: {
@@ -127,6 +142,116 @@ export default {
         this.$emit("input", newValue);
       },
     },
+  },
+  methods: {
+    async getData(obj) {
+      const mensaje = new MensajeriaUtils(this.$toast);
+      try {
+        this.swModificar = true;
+        const data = { idx: obj.idx, modelo: obj.linked };
+        const results = await srv.getDataByModelIdxEess(data);
+        if (results.ok) {
+          this.indexDatosSelected = Object.keys(results.data);
+          this.datosSelected = results.data;
+        } else {
+          mensaje.setMensaje(
+            "Ocurrio un problema en la adquision de datos. " + results.message
+          );
+          mensaje.advertencia();
+        }
+      } catch (error) {
+        console.log(error);
+        mensaje.setMensaje(
+          "Ocurrio un error en la Adquision de datos. Vuelva a Intentarlo, si el erro persiste comuniquese con su Administrador"
+        );
+        mensaje.error();
+      }
+    },
+    async newReg() {
+      const mensaje = new MensajeriaUtils(this.$toast);
+      this.datosSelected = {};
+      this.itemSelected = [];
+      try {
+        this.swModificar = false;
+        const data = { idx: "-1", modelo: this.item.linked };
+        const results = await srv.getDataParamEessByIdx(data);
+
+        if (results.ok) {
+          this.indexDatosSelected = Object.keys(results.data);
+          this.datosSelected = results.data;
+        } else {
+          mensaje.setMensaje(
+            "Ocurrio un problema en la adquision de datos. " + results.message
+          );
+          mensaje.advertencia();
+        }
+      } catch (error) {
+        console.log(error);
+        mensaje.setMensaje(
+          "Ocurrio un error en la Adquision de datos. Vuelva a Intentarlo, si el erro persiste comuniquese con su Administrador"
+        );
+        mensaje.error();
+      }
+    },
+    async saveItem() {
+      const mensaje = new MensajeriaUtils(this.$toast);
+      try {
+        const modelo = this.item.linked;
+        let idx = "-1";
+        if (this.swModificar) idx = this.itemSelected[0].idx;
+
+        const datos = utils.filterDataByModelParam(this.datosSelected);
+        //this.datosSelected[index].valores.idx= idx
+        const data = {
+          modelo: modelo,
+          idx: idx,
+          sw: this.swModificar,
+          data: datos,
+        };
+        console.log(data);
+        //guardar dato
+        const results = await srv.saveDataByModel(data);
+
+        if (results.ok) {
+          console.log(results);
+          //recrga datos
+          mensaje.setMensaje(results.message);
+          mensaje.informacion();
+          this.recarga(true);
+          this.datosSelected = {};
+          this.itemSelected = [];
+          this.swModificar = false;
+        } else {
+          mensaje.setMensaje(
+            "Ocurrio un problema mientra se guardaban los datos. " +
+              results.message
+          );
+          mensaje.advertencia();
+        }
+      } catch (error) {
+        console.log(error);
+        mensaje.setMensaje(
+          "Ocurrio un error en el proceso de guardado. Comuniquese con su administrador"
+        );
+        mensaje.error();
+      }
+    },
+  },
+  watch: {
+    itemSelected: {
+      handler(val, oldVal) {
+        if (val.length == 1) this.getData(val[0]);
+        else {
+          this.datosSelected = {};
+          this.swModificar = false;
+        }
+      },
+      deep: true,
+    },
+    indexParam: function(val){
+      this.itemSelected= []
+      this.datosSelected= {}
+    }
   },
 };
 </script>

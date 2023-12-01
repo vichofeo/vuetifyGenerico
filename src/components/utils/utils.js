@@ -40,4 +40,3 @@ export function filterDataByModelParam(datosObjFromParam){
   }
       return data
 }
-
