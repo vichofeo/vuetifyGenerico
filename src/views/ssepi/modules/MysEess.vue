@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="ma-2">
     <v-card-title class="primary white--text text-h5">
       Arbol de datos de Establecimientos de Salud
     </v-card-title>

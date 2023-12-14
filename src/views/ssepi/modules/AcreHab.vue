@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="margen">
       <p>&nbsp;</p>
       <ContenedorCard color="blue dark-1" :title="titulo" :image="true">
         <FrmModelElements
@@ -82,4 +82,8 @@
     },
   };
   </script>
-  
+  <style scoped>
+  #margen{
+   padding: 10px;
+   }
+ </style>

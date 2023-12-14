@@ -8,29 +8,27 @@
               vertical-align: middle;
               align-items: center;
               position: fixed;
-              top: 65px;
+              top: 50px;
             ">
-          
-            <v-container class="columns float is-justify-content-center mt-2" >
-              <v-bottom-navigation color="tred" class="ma-2" height="100%" >
-
-                <v-btn @click="switcheaIconosHospitales('all')" v-if="inst.nombre_corto" height="90%">
+          <div class="columns float">
+            <div class="column is-flex is-justify-content-center">
+              <v-bottom-navigation color="teal" background-color="rgba(200, 200, 200, 0.6)">
+                <v-btn @click="switcheaIconosHospitales('all')" v-if="inst.nombre_corto">
                   <span>Todos: {{ eess.length }}</span>
-                  <v-avatar class="profile" left size="30">
+                  <v-avatar class="profile" left size="40">
                     <v-img :src="'/img/'+ inst.nombre_corto.toLowerCase() +'.png'"></v-img>
                   </v-avatar>
                 </v-btn>
-
                 <v-btn @click="switcheaIconosHospitales(i)" x-small v-for="(nivel, i) in labels.niveles" :key="'img' + i"
-                  v-show="niveles" height="90%">
+                  v-show="niveles">
                   <span>{{ nivel }}: {{ niveles[i].length }}</span>
-                  <v-avatar class="profile" left size="30">
+                  <v-avatar class="profile" left size="35">
                     <v-img :src="ICONS[i]"></v-img>
                   </v-avatar>
                 </v-btn>
-
               </v-bottom-navigation>
-            </v-container>
+            </div>
+          </div>
   
           <l-map :zoom="zoom" :center="center" :options="mapOptions" :bounds="bounds" style="height: 100vh; z-index: 0"
             @update:center="centerUpdate" @update:zoom="zoomUpdate" :key="forceRender">
