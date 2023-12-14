@@ -4,7 +4,7 @@
     
     <dashboard-core-app-bar v-if="$route.meta.requiereAuth"/>
 
-    <dashboard-core-view v-if="$route.meta.requiereAuth"/>
+    <dashboard-core-view></dashboard-core-view>
 
     
   </v-app>

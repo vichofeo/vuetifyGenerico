@@ -42,6 +42,7 @@ import { faArrowRight, faArrowLeft, faArrowUp, faArrowDown } from '@fortawesome/
 library.add(faArrowRight, faArrowLeft, faArrowUp, faArrowDown)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
+import './plugins/chartist'
 
 Vue.config.productionTip = false
 

@@ -1,11 +1,12 @@
 <template>
   <div>
     <p>&nbsp;</p>
-    <ContenedorCard color="teal dark-1" :title="titulo" :image="true">
+    <ContenedorCard color="blue dark-1" :title="titulo" :image="true">
       <FrmModelElements
         v-model="parametros[indexParam]"
         :lengthCols="4"
         :index-param="indexParam"
+        :index-from-url="indexReal"
         :recarga="recargar"
         v-if="indexParam"
         :forEdit="true"
@@ -18,21 +19,14 @@
 import * as srv from "@/services/ssepi/geoRefDataService";
 import ContenedorCard from "@/components/utils/ContenedorCard.vue";
 import ContenedorAlert from "@/components/utils/ContenedorAlert.vue";
-import TableData from "@/components/utils/TableData.vue";
 
-import Loading from "@/components/utils/Loading.vue";
-import ComboBoxForms from "@/components/inputs/ComboBoxForms.vue";
-import CalendarForms from "@/components/inputs/CalendarForms.vue";
 import FrmModelElements from "@/components/inputs/FrmModelElements.vue";
 
 export default {
   components: {
     ContenedorCard,
     ContenedorAlert,
-    TableData,
-    Loading,
-    ComboBoxForms,
-    CalendarForms,
+
     FrmModelElements,
   },
   name: "MiEstablecimientoSalud",
@@ -50,6 +44,7 @@ export default {
     },
     titulo: "",
     indexParam: null,
+    indexReal: null,
   }),
   mounted() {    
     this.verifyOption();
@@ -61,6 +56,7 @@ export default {
         const results = await srv.getDataParamEess(this.frm);
         this.parametros = results.data;
         this.indexParam = Object.keys(this.parametros)[0];
+        this.indexReal =  this.frm
         this.titulo =
           results.institucion.nombre_institucion + ": " + this.indexParam;
       } catch (e) {
@@ -73,22 +69,7 @@ export default {
       else this.frm = "all";
     },
 
-    async saveItem() {
-      this.swLoader = true;
-      this.mensajePopup = "";
 
-      const res = ""; //await srv.editSaveDataModRues({ [index]: this.editedItem })
-
-      if (res.ok) {
-        this.dialog = false;
-      } else {
-        this.mensajePopup =
-          res.message +
-          ". El campo editado excede en longitud de lo permitido. Intente nuevamente";
-      }
-
-      this.swLoader = false;
-    },
     recargar(sw){
       if(sw)
       this.getModuleDta()

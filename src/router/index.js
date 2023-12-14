@@ -73,6 +73,14 @@ const routes = [
         meta: { requiereAuth: true },
         props: true
       },
+      {
+        path: 'snis/:idx',
+        name: 'fsnis',
+        component: () => import(/* webpackChunkName: "about" */ "@/views/ssepi/modules/MySnis.vue"),
+        beforeEnter: authGuard,
+        meta: { requiereAuth: true },
+        props: true
+      },
 
     ]
   },

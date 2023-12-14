@@ -58,34 +58,27 @@
       </v-stepper-items>
     </v-stepper>
 
-    <loading :swLoading="swLoading"></loading>
+    <Loading :swLoading="swLoading"></Loading>
   </div>
 </template>
 
 <script>
 import * as srv from "@/services/ssepi/geoRefDataService";
-import ContenedorCard from "@/components/utils/ContenedorCard.vue";
-import ContenedorAlert from "@/components/utils/ContenedorAlert.vue";
-import TableData from "@/components/utils/TableData.vue";
 
-import Loading from "@/components/utils/Loading.vue";
-import ComboBoxForms from "@/components/inputs/ComboBoxForms.vue";
-import CalendarForms from "@/components/inputs/CalendarForms.vue";
 import FrmModelElements from "./FrmModelElements.vue";
 
 import * as util from "@/components/utils/utils";
 import MensajeriaUtils from "@/components/utils/MensajeriaUtils";
 
+import ContenedorAlert from "../utils/ContenedorAlert.vue";
+import Loading from "../utils/Loading.vue";
+
 import Swal from "sweetalert2";
 import { utils } from "xlsx";
 export default {
-  components: {
-    ContenedorCard,
-    ContenedorAlert,
-    TableData,
+  components: {    
     Loading,
-    ComboBoxForms,
-    CalendarForms,
+    ContenedorAlert,
     FrmModelElements,
   },
   name: "FrmByModel",

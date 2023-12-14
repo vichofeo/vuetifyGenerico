@@ -1,9 +1,27 @@
 <template>
   <div v-if="!Array.isArray(item.valores)">
-    <FrmModelElementsBasics
-      v-model="item"
-      :lengthCols="lengthCols"
-    ></FrmModelElementsBasics>
+    <v-scroll-y-transition mode="out-in">
+    <v-card>
+      <v-card-title v-if="forEdit">Por favor elija las opciones e introduzca las Modificaciones</v-card-title>
+      <v-card-text>
+        <FrmModelElementsBasics
+        v-model="item"
+        :lengthCols="lengthCols"
+      ></FrmModelElementsBasics></v-card-text>
+      <v-card-actions v-if="forEdit"><v-spacer></v-spacer>
+        <v-btn
+          small
+          outlined
+          color="success"
+          @click="saveItemSimplex"        
+        >
+          <v-icon left> mdi-content-save-all </v-icon>
+          Guardar Modificaciones
+        </v-btn>
+        
+      </v-card-actions>
+    </v-card>
+  </v-scroll-y-transition>
   </div>
 
   <div v-else>
@@ -25,6 +43,7 @@
             :itemsPerPage="10"
           />
         </v-col>
+        <v-scroll-y-transition mode="out-in">
         <v-col cols="12" xs="12" sm="12" md="6" xl="6" lg="6">
           <v-card>
             <v-card-text class="font-weight-black"
@@ -61,6 +80,7 @@
             </v-card-actions>
           </v-card>
         </v-col>
+        </v-scroll-y-transition>
       </v-row>
     </div>
     <div v-else>
@@ -109,6 +129,7 @@ export default {
     value: { type: Object, default: {} },
     lengthCols: { type: Number, default: 3 },
     indexParam: { type: String, default: "Responsables" },
+    indexFromUrl: { type: String, default: "eess" },
     forEdit: { type: Boolean, default: false },
     recarga: {
       type: Function,
@@ -121,10 +142,10 @@ export default {
     return {
       colors: {
         Responsables: "indigo",
-        Infraestructura: "teal",
-        Mobiliario: "green",
-        Equipamiento: "blue",
-        Personal: "blue-grey",
+        Infraestructuras: "teal",
+        Mobiliarios: "green",
+        Equipamientos: "blue",
+        Personals: "blue-grey",
       },
       itemSelected: [],
       datosSelected: {},
@@ -221,6 +242,50 @@ export default {
           this.datosSelected = {};
           this.itemSelected = [];
           this.swModificar = false;
+        } else {
+          mensaje.setMensaje(
+            "Ocurrio un problema mientra se guardaban los datos. " +
+              results.message
+          );
+          mensaje.advertencia();
+        }
+      } catch (error) {
+        console.log(error);
+        mensaje.setMensaje(
+          "Ocurrio un error en el proceso de guardado. Comuniquese con su administrador"
+        );
+        mensaje.error();
+      }
+    },
+    async saveItemSimplex() {
+      const mensaje = new MensajeriaUtils(this.$toast);
+      try {
+        const modelo = this.indexFromUrl;
+        let idx = "-1";
+        
+        console.log("data ORIGEN............",this.item);
+        const aux=  {[this.indexParam]: this.item}
+        const datos = utils.filterDataByModelParam(aux);
+        //this.datosSelected[index].valores.idx= idx
+        const data = {
+          modelo: modelo,
+          idx: idx,
+          sw: true,
+          data: datos,
+        };
+        console.log("SAVE ITEM SIMPLEX............",data);
+        //guardar dato
+        const results = await srv.saveDataByModel(data);
+
+        if (results.ok) {
+          console.log(results);
+          //recrga datos
+          mensaje.setMensaje(results.message);
+          mensaje.informacion();
+          this.datosSelected = {};
+          this.itemSelected = [];
+          this.indexDatosSelected= null
+          this.recarga(false);          
         } else {
           mensaje.setMensaje(
             "Ocurrio un problema mientra se guardaban los datos. " +

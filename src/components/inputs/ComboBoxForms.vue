@@ -8,6 +8,7 @@
           
           chips
           v-bind="$attrs"
+          @change="onChange"
         >
           <template v-slot:selection="data">
             <v-chip
@@ -18,7 +19,7 @@
               @click:close="data.parent.selectItem(data.item.value)"
             >
               <v-avatar
-                class="accent white--text"
+                class="primary white--text"
                 left
                 v-text="data.item.text?.slice(0, 1).toUpperCase()"
               ></v-avatar>
@@ -36,7 +37,8 @@ export default {
   name: "ComboBoxPersonalizado",
   props: {        
     value: { type: Object, default: {value:-1,text:'-Sin Dato-'} },
-    itemsCombo: {type: Array, default: []}
+    itemsCombo: {type: Array, default() {return []}},
+    onChange: { type: Function, default() { return null; }}, 
   },
   data() {
     return {
@@ -55,6 +57,18 @@ export default {
       },
       set(newValue) {
         this.$emit("input", newValue);
+      },
+    },
+  },
+
+  watch: {
+    itemsCombo: {
+      deep: true,
+      handler: function (newValue, oldValue) {
+        //console.log("control nuevo: ",newValue, "valor antiguo", oldValue)
+        this.items =  newValue
+        if(oldValue)
+        this.dataSelected = this.items[0]
       },
     },
   },

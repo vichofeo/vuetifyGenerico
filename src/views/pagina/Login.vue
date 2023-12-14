@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       usuario: {
-        login: "aorlp",
+        login: "aorsc",
         //login: 'chapare'   ,
         password: "sadmin",
       },

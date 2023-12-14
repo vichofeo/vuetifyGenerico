@@ -1,48 +1,29 @@
 <template>
-  <v-menu
-    ref="comboDate"
-    v-model="comboDate"
-    :close-on-content-click="false"
-    transition="scale-transition"
-    offset-y
-    max-width="290px"
-    min-width="auto"
-  >
+  <!-- v-menu ref="comboDate" v-model="comboDate" :close-on-content-click="false" transition="scale-transition" offset-y
+    max-width="290px" min-width="auto" -->
+    <v-dialog ref="dialog" v-model="modal" :return-value.sync="date" persistent width="490px">
     <template v-slot:activator="{ on, attrs }">
-      <v-text-field
-        v-model="fecha_nacimiento"
-        :label="label"
-        :hint="`Formato dd/mm/aaaa`"
-        v-mask="'##/##/####'"
-        placeholder="dd/mm/aaaa"
-        persistent-hint
-        prepend-inner-icon="mdi-calendar"
-        v-bind="attrs"
-        v-on="on"
-        @blur="
-          date = parseDate(fecha_nacimiento);
-          fullName = parseDate(fecha_nacimiento);
-        "
-        background-color="#ffffff"
-        required
-        dense
-        clear-icon="mdi-close-circle"
-        clearable
-      />
+      <v-text-field v-model="fecha_nacimiento" :label="label" :hint="`Formato dd/mm/aaaa`" v-mask="'##/##/####'"
+        placeholder="dd/mm/aaaa" persistent-hint prepend-inner-icon="mdi-calendar" v-bind="attrs" v-on="on" 
+        @blur="date = parseDate(fecha_nacimiento);" 
+        background-color="#ffffff" required dense clear-icon="mdi-close-circle" clearable 
+        
+        />{{ fecha_nacimiento }} ---- {{ date }}
     </template>
-    <v-date-picker
-      color="#1D62A1"
-      v-model="date"
-      locale="es-US"
-      :max="
-        new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-          .toISOString()
-          .substr(0, 10)
-      "
-      min="1930-01-01"
-      @input="comboDate = false"
-    ></v-date-picker>
-  </v-menu>
+    
+    <v-date-picker color="#1D62A1" v-model="date" locale="es-US" 
+    :max="new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)" 
+    min="1930-01-01" :landscape="true"  scrollable>
+      <v-spacer></v-spacer>
+      <v-btn text color="primary" @click="modal = false">
+          Cancel
+      </v-btn>
+      <v-btn text color="primary" @click="$refs.dialog.save(date)">
+          OK
+      </v-btn>
+    </v-date-picker>
+    </v-dialog>
+  <!--/v-menu -->
 </template>
 
 <script>
@@ -57,6 +38,8 @@ export default {
   },
 
   data: () => ({
+    modal: false,
+    
     valid: true,
     fecha_nacimiento: null, //(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
 
@@ -65,15 +48,7 @@ export default {
   computed: {
     /*computedDateFormatted() {
       return this.formatDate(this.date);
-    },*/
-    dataSelected: {
-      get() {
-        return this.value;
-      },
-      set(newValue) {
-        this.$emit("input", newValue);
-      },
-    },
+    },*/    
     date: {
       // getter
       get: function () {
@@ -93,9 +68,7 @@ export default {
       this.fecha_nacimiento = this.formatDate(data);
     } else {
       let d = new Date();
-      this.fecha_nacimiento = `${d.getFullYear()}-${
-        d.getMonth() + 1
-      }-${d.getDate()}`; //ref(`${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`);
+      this.fecha_nacimiento = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; //ref(`${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`);
       this.date = this.fecha_nacimiento;
     }
   },
@@ -103,22 +76,7 @@ export default {
     validate() {
       this.$refs.form.validate();
     },
-    onChange() {
-      const datos = {};
-      datos.fechaNacimiento = null;
-      datos.FechaNacimiento = null;
-      if (this.fecha_nacimiento != null && this.fecha_nacimiento != "") {
-        //if (this.validateDate(this.fecha_nacimiento))
-        if (moment(this.fecha_nacimiento, "DD/MM/YYYY", true).isValid()) {
-          datos.fecha_nacimiento = moment(
-            this.fecha_nacimiento,
-            "DD/MM/YYYY"
-          ).format("YYYY-MM-DD");
-          datos.fechaNacimiento = this.fecha_nacimiento;
-          datos.FechaNacimiento = datos.fecha_nacimiento;
-        }
-      }
-    },
+   
     validateDate(fechaIn) {
       const DATE_REGEX = /^(0[1-9]|[1-2]\d|3[01])(\/)(0[1-9]|1[012])\2(\d{4})$/;
       const CURRENT_YEAR = new Date().getFullYear();
@@ -143,10 +101,10 @@ export default {
       }
       return true;
     },
-    formatDate(date) {
+    formatDate(date) {      
       if (!date) return null;
       const [year, month, day] = date.split("-");
-      return `${day}/${month}/${year}`;
+      return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
     },
     parseDate(date) {
       if (!date) return null;
@@ -158,7 +116,7 @@ export default {
   watch: {
     date(val) {
       this.fecha_nacimiento = this.formatDate(this.date);
-      this.onChange();
+      
     },
   },
 };

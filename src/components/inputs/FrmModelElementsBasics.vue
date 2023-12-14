@@ -20,6 +20,28 @@
         v-if="obj[3] == 'T' && !obj[5]"
       />
 
+      
+      <combo-box-forms
+        v-model="item.valores[nameObj].selected"
+        :items-combo="item.valores[nameObj].items[item.valores[item.valores[nameObj].dependency].selected.value]"
+        :label="obj[0]"
+        :readonly="!obj[1]"
+        :filled="!obj[1]"
+        :rounded="!obj[1]"
+        dense
+        hide-details
+        :disable-lookup="true"
+        flat
+        v-else-if="
+          obj[3] == 'C' &&
+          item.valores[nameObj] &&
+          item.valores[nameObj].selected && item.valores[nameObj].dependency && 
+          item.valores[nameObj].items[item.valores[item.valores[nameObj].dependency].selected.value] &&
+          !obj[5]
+        "
+      />
+
+    
       <combo-box-forms
         v-model="item.valores[nameObj].selected"
         :items-combo="item.valores[nameObj].items"
@@ -47,7 +69,7 @@
       <div v-else>
         <div class="font-weight-black">{{ obj[0] }}:</div>
         <span v-if="obj[3] == 'T'">
-          {{ item.valores[nameObj] }} {{ obj[5] }}</span
+          {{ item.valores[nameObj] }} </span
         >
         <span v-else> {{ item.valores[nameObj]?.selected?.text }}</span>
       </div>

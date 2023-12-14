@@ -1,7 +1,7 @@
 <template>
   <v-card>
-    <v-card-title class="indigo white--text text-h5">
-      User Directory
+    <v-card-title class="primary white--text text-h5">
+      Arbol de datos de Establecimientos de Salud
     </v-card-title>
     <v-row class="pa-4" justify="space-between">
       <v-col cols="12" xs="12" sm="12" md="4" lg="4" xl="5">
@@ -198,3 +198,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.fcolor {
+  color: #1D62A1;
+}
+</style>
