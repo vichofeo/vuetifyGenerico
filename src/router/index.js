@@ -81,6 +81,14 @@ const routes = [
         meta: { requiereAuth: true },
         props: true
       },
+      {
+        path: 'acrehab/:idx',
+        name: 'acrehab',
+        component: () => import(/* webpackChunkName: "about" */ "@/views/ssepi/modules/AcreHab.vue"),
+        beforeEnter: authGuard,
+        meta: { requiereAuth: true },
+        props: true
+      },
 
     ]
   },

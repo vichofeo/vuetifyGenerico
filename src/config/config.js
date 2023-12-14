@@ -1,4 +1,4 @@
-export const urlbase = "/";
+export const urlbase = "http://192.168.10.250:3000";
 
 
 export const getHeader = function () {
