@@ -3,7 +3,7 @@
     <v-navigation-drawer v-model="drawerRight" app clipped width="100" color="#fff">
       <v-list-item>
         <div id="logoasuss">
-          <img src="/img/logo.png" alt="Epidemiologia SSCP" class="mt-5"/>
+          <img src="/img/logo.svg" alt="Epidemiologia SSCP" class="mt-5"/>
         </div>
       </v-list-item>
       <br>
@@ -15,9 +15,8 @@
             <v-tooltip right>
               <template v-slot:activator="{ on: tooltip }">
                 <v-btn class="mt-1" width="90" height="50" text v-bind="attrs" v-on="{ ...tooltip, ...on }"
-                  @click="() => { if (!Array.isArray(menu)) $router.push(menu.value).catch(() => { }); }">
-                  <v-img max-width="45"
-                    :src='"/img/iconos/" + title.replaceAll(" ", "").toLowerCase().replaceAll("_", "") + ".png"'></v-img>
+                  @click="() => {localizacion=title; if (!Array.isArray(menu)) $router.push(menu.value).catch(() => { }); }">
+                  <v-img max-width="40" :src='"/img/iconos/" + buscarIcon(title)'></v-img>
                 </v-btn>
               </template>
               <span>{{ title }}</span>
@@ -48,7 +47,8 @@
       <v-btn width="90" height="60" @click.stop="drawerRight = !drawerRight" color="#1D62A1" class="mr-2">
         <v-icon x-large>mdi-menu</v-icon>
       </v-btn>
-      <v-toolbar-title class="text">Menu</v-toolbar-title>
+        <v-toolbar-title class="text ml-4" v-if='localizacion!=""'> {{ localizacion.toUpperCase() }}</v-toolbar-title>
+        <v-toolbar-title class="text ml-4" v-else> GEOREFERENCIA</v-toolbar-title>
       <v-spacer></v-spacer>
       <!-- menu del usuario lado derecho -->
       <div class="d-flex pa-2">
@@ -71,7 +71,7 @@
           <v-list color="#E8EAF6" class="ma-2 pa-3 text-center">
             <v-toolbar-title class="text mt-3 mr-3" v-text="$route.name"></v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn to="/ssepi/lgnUser" class="mt-2" color="#1D62A1" dark>Cambiar Contraseña</v-btn>
+            <v-btn to="/ssepi/lgnUser" class="mt-2 ml-4" color="#1D62A1" dark @click="() => {localizacion='INFORMACION DEL USUARIO'}">Cambiar Contraseña</v-btn>
             <v-spacer></v-spacer>
             <v-btn to="/" class="mt-2" color="#1D62A1" dark>Salir</v-btn>
           </v-list>
@@ -129,6 +129,7 @@ export default {
   },
 
   data: () => ({
+    localizacion: "",
     selectedItem: [],
     drawerRight: null,
     sigla: "ASUSS",
@@ -223,6 +224,29 @@ export default {
       this.menuOps = result.data;
       this.sigla = result.moredata.institucion;
     },
+    buscarIcon(title)
+    {
+      let Bicon=title.replaceAll(" ", "").toLowerCase().replaceAll("_", "").replaceAll("/", "");
+      switch (Bicon) {
+        case "frmssnis":
+          return "frmssnis.svg";
+        case "georeferencia":
+          return "georeferencia.svg";
+        case "miestablecimiento":
+          return "miestablecimiento.svg";
+        case "misestablecimientos":
+          return "misestablecimientos.svg";
+        case "reportes":
+          return "reportes.svg";
+        case "usuarios":
+          return "usuarios.svg";
+        case "acreditacionhabilitacion":
+          return "acrehabi.svg";
+        default:
+          return "nohay.svg";
+      }
+    }
+
 
   },
 

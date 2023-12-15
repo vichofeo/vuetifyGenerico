@@ -69,7 +69,7 @@
               <v-avatar size="88">
                 <v-img
                   :src="`/img/${selected.nombre_corto}.png`"
-                  lazy-src="/img/asuss.png"
+                  lazy-src="/img/asuss.svg"
                 >
                   <template v-slot:placeholder>
                     <v-row

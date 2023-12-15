@@ -9,7 +9,7 @@
               <v-card class="elevation-20 pa-3">
                 <v-card-text>
                   <div>
-                    <img src="img/logo.png" alt="Epidemiologia SSCP" width="180" height="180" />
+                    <img src="img/logo.svg" alt="Epidemiologia SSCP" width="180" height="180" />
                   </div>
                   <v-form>
                     <v-text-field append-icon="mdi-account" name="login" label="Login" type="text" v-model="usuario.login"

@@ -8,7 +8,7 @@
                 <v-card-text>
                   <div class="layout column align-center">
                     <img
-                      src="img/logo.png"
+                      src="img/logo.svg"
                       alt="Epidemiologia SSCP"
                       width="180"
                       height="180"

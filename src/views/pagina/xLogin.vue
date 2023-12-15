@@ -7,7 +7,7 @@
             <v-card class="elevation-1 pa-3">
               <v-card-text>
                 <div class="layout column align-center">
-                  <img src="img/logo.png" alt="Epidemiologia SSCP" width="180" height="180" />
+                  <img src="img/logo.svg" alt="Epidemiologia SSCP" width="180" height="180" />
                   <h1 class="flex my-4 primary--text text-center">
                     Area Epidemiologia Bioestadistica
                   </h1>
