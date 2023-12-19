@@ -176,11 +176,11 @@ table.pvtTable tbody tr td {
 }
 
 .pvtRows {
-  background-color: #899fb4;
+  /* background-color: #899fb4; */
   height: 35px;
 }
 .pvtCols {
-  background-color: #134069;
+  /* background-color: #134069; */
   height: 35px;
 }
 
@@ -232,14 +232,14 @@ table.pvtTable tbody tr td {
 }
 
 .pvtCols li {
-  color: green;
+  color: black;
 }
 /* lado vertical de la tabla */
 .pvtVertList {
   vertical-align: top;
 }
 .pvtAttr slot{
-  color: red;
+  color: white;
 }
 
 
