@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 /* export const urlbase = "http://192.168.10.250:3000"; */
 export const urlbase = "http://esalud.asuss.gob.bo/";
+=======
+export const urlbase = "/";
+>>>>>>> 1b5ca14d5d9b401886af9937b33d991e1eff2fcf
 
 
 export const getHeader = function () {
