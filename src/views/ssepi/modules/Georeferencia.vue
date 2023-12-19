@@ -38,7 +38,8 @@
                 l-geo-json :geojson="primaryCoord" :options-style="primaryStyles()" :key="uuid()" /
                 -->
             <l-marker v-for="(icon, index) in establecimientos" :key="icon.idx" :visible="icon.visible"
-              :draggable="icon.draggable" :lat-lng.sync="icon.coordenadas" @dblclick="inner2Click(icon, index)"
+              :draggable="icon.draggable" :lat-lng.sync="icon.coordenadas" 
+              @dblclick="inner2Click(icon, index)"
               @click.right="inner1Click(icon, index)">
               <l-icon :icon-size="[ICON_SIZE.normal, ICON_SIZE.normal]"
                 :icon-anchor="[ICON_SIZE.normal / 2, ICON_SIZE.normal]" :icon-url="ICONS[icon.nivel_atencion]"
