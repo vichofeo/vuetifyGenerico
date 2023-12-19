@@ -3,37 +3,37 @@
     <v-row>
       <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12">
         <div style="
-            height: 91vh;
-            width: 100%;
-            vertical-align: middle;
-            align-items: center;
-            position: fixed;
-            top: 65px;
-          ">
-          <v-container class="columns float is-justify-content-center mt-2">
-            <v-bottom-navigation color="teal" background-color="rgba(200, 200, 200, 0.6)" class="ma-2" height="100%" >
-              
-              <v-btn @click="switcheaIconosHospitales('all')" v-if="inst.nombre_corto" height="90%" color="rgba(200, 200, 200, 0.2)">
-                <span>Todos: {{ eess.length }}</span>
-                <v-avatar class="profile" left size="30">
-                  <v-img :src="'/img/' + inst.nombre_corto.toLowerCase() + '.png'"></v-img>
-                </v-avatar>
-              </v-btn>
-
-              <v-btn @click="switcheaIconosHospitales(i)" x-small v-for="(nivel, i) in labels.niveles" :key="'img' + i"
-                v-show="niveles" height="90%" color="rgba(200, 200, 200, 0.2)">
-                <span>{{ nivel }}: {{ niveles[i].length }}</span>
-                <v-avatar class="profile" left size="30">
-                  <v-img :src="ICONS[i]"></v-img>
-                </v-avatar>
-              </v-btn>
-            </v-bottom-navigation>
-          </v-container>
-
+              height: 91vh;
+              width: 100%;
+              vertical-align: middle;
+              align-items: center;
+              position: fixed;
+              top: 50px;
+            ">
+          <div class="columns float">
+            <div class="column is-flex is-justify-content-center">
+              <v-bottom-navigation color="teal" background-color="rgba(200, 200, 200, 0.6)">
+                <v-btn @click="switcheaIconosHospitales('all')" v-if="inst.nombre_corto">
+                  <span>Todos: {{ eess.length }}</span>
+                  <v-avatar class="profile" left size="40">
+                    <v-img :src="'/img/'+ inst.nombre_corto.toLowerCase() +'.png'"></v-img>
+                  </v-avatar>
+                </v-btn>
+                <v-btn @click="switcheaIconosHospitales(i)" x-small v-for="(nivel, i) in labels.niveles" :key="'img' + i"
+                  v-show="niveles">
+                  <span>{{ nivel }}: {{ niveles[i].length }}</span>
+                  <v-avatar class="profile" left size="35">
+                    <v-img :src="ICONS[i]"></v-img>
+                  </v-avatar>
+                </v-btn>
+              </v-bottom-navigation>
+            </div>
+          </div>
+  
           <l-map :zoom="zoom" :center="center" :options="mapOptions" :bounds="bounds" style="height: 100vh; z-index: 0"
             @update:center="centerUpdate" @update:zoom="zoomUpdate" :key="forceRender">
             <l-tile-layer :url="mapUrl" />
-
+  
             <!--
                 l-geo-json :geojson="primaryCoord" :options-style="primaryStyles()" :key="uuid()" /
                 -->
@@ -49,31 +49,20 @@
                 {{ icon.nombre_dpto }} - {{ icon.zona_barrio }} -
                 {{ icon.avenida_calle }} <br />
                 {{ icon.clase }} - {{ icon.nivel_atencion }}
-                <!-- <div v-if="!icon.sw">
+                <div v-if="!icon.sw">
                   <i>Doble click para editar ubicacion </i>
                 </div>
                 <div v-else>
                   <i>Doble click guardar nuevas coordenadas </i>
                   <span>Click derecho para editar</span>
-                </div> -->
+                </div>
               </l-tooltip>
-              
-                <l-popup id="cajaMen" position="bottomleft">
-                  <l-control id="cajaMen2">
-                    <button class="button" @click="inner2Click(icon, index)"
-                      v-if="establecimientos[index].sw === false">Editar longuitud
-                    </button>
-                    <button class="button" @click="inner2Click(icon, index)" v-else>Guardar
-                    </button>
-                    <button class="button" @click="inner1Click(icon, index)">Mas Informacon</button>
-                  </l-control>
-                </l-popup>.
             </l-marker>
           </l-map>
         </div>
       </v-col>
     </v-row>
-
+  
     <!-- ************ loader ************* -->
     <v-dialog v-model="swLoader" hide-overlay persistent width="300" style="z-index: 10">
       <v-card color="primary" dark>
@@ -83,7 +72,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-
+  
     <!-- ************* CRUD FRM -->
     <frmDataGralCRUD v-model="dialog" :idx="idxDialog" :modelo="modelDialog" v-if="dialog" />
   </div>
@@ -214,9 +203,7 @@ export default {
     },
     inner2Click(obj, index) {
       //oculta iconos
-      this.establecimientos[index].sw
-        ? this.iconRestoreDraggable()
-        : this.iconDraggable(obj);
+      this.establecimientos[index].sw ? this.iconRestoreDraggable() : this.iconDraggable(obj);
       //reorienta pantalla
       this.zoom = 7;
       this.bounds = latLngBounds([[obj.latitud, obj.longitud]]);
@@ -229,8 +216,12 @@ export default {
     },
 
     inner1Click(obj, index) {
-      this.idxDialog = this.establecimientos[index].idx;
-      this.dialog = true;
+      if (this.establecimientos[index].sw) {
+        this.idxDialog = this.establecimientos[index].idx;
+        this.dialog = true;
+      } else {
+        return;
+      }
     },
     zoomUpdate(zoom) {
       this.currentZoom = zoom;
@@ -273,27 +264,24 @@ export default {
           sw: false,
         };
       });
-      return o;
+      return o
     },
 
     async obtieneDataLatLgn() {
       try {
         const result = await srv.getDataLatLngEess(this.frm);
         if (result.ok) {
-          this.eess = result.data;
+          this.eess = result.data
           this.center = latLng(result.cnf.center[0], result.cnf.center[1]);
           this.zoom = result.cnf.zoom;
-          this.inst = result.inst;
-          this.niveles = result.niveles;
-          this.labels = result.labels;
+          this.inst = result.inst
+          this.niveles = result.niveles
+          this.labels = result.labels
 
-          console.log("llave niveles es:::", this.keyNiveles);
-          if (this.keyNiveles == "all")
-            this.establecimientos = this.seteaObjPuntosMapa(this.eess);
-          else
-            this.establecimientos = this.seteaObjPuntosMapa(
-              this.niveles[this.keyNiveles]
-            );
+          console.log("llave niveles es:::", this.keyNiveles)
+          if(this.keyNiveles =='all')
+          this.establecimientos = this.seteaObjPuntosMapa(this.eess)
+        else this.establecimientos = this.seteaObjPuntosMapa(this.niveles[this.keyNiveles])
 
           this.forceRender = this.uuid();
         } else {
@@ -309,16 +297,17 @@ export default {
     },
 
     switcheaIconosHospitales(index) {
-      this.keyNiveles = index;
-      if (index == "all")
-        this.establecimientos = this.seteaObjPuntosMapa(this.eess);
-      else this.establecimientos = this.seteaObjPuntosMapa(this.niveles[index]);
+      this.keyNiveles = index
+      if (index == 'all')
+        this.establecimientos = this.seteaObjPuntosMapa(this.eess)
+      else
+        this.establecimientos = this.seteaObjPuntosMapa(this.niveles[index])
     },
   },
   beforeRouteUpdate(to, from) {
     // just use `this`
     this.frm = to.params.idx;
-    this.keyNiveles = "all";
+    this.keyNiveles = 'all'
     this.obtieneDataLatLgn();
   },
 };
@@ -411,58 +400,4 @@ button {
   padding: 1px;
   margin: 4px;
 }
-
-/* caja de funciones */
-.leaflet-popup{
-  position: relative;
-  top: -130px; 
-  left: -130px;
-  width: 160px;
-  color: #ffffff;
-}
-.leaflet-popup-content-wrapper {
-  background: #c7d4e0;
-}
-.button{
-  width: 120px;
-  height:25px;
-  margin: 2px;
-  font-size: 10px;
-}
-/* animacion del boton */
-.button{
-  background:#1DA18C;
-  color:#fff;
-  border:none;
-  position:relative;
-  padding:0 2em;
-  cursor:pointer;
-  transition:800ms ease all;
-  outline:none;
-}
-.button:hover{
-  background:#fff;
-  color:#1DA18C;
-}
-.button:before, .button:after{
-  content:'';
-  position:absolute;
-  top:0;
-  right:0;
-  height:2px;
-  width:0;
-  background: #1DA18C;
-  transition:400ms ease all;
-}
-.button:after{
-  right:inherit;
-  top:inherit;
-  left:0;
-  bottom:0;
-}
-.button:hover:before,.button:hover:after{
-  width:100%;
-  transition:800ms ease all;
-}
-
 </style>
