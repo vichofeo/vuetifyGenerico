@@ -57,3 +57,13 @@ export const saveWeUser = async (data)=>{
     const res = await http().post(`/api/geo/weuser`, data)
     return res.data
 }
+
+//para acreditacion y habilitacion
+export const getcbxs =  async(data) =>{
+    const res = await http().post(`/api/geo/eess/cbox`, data)
+    return res.data
+}
+export const getcbxsWithData =  async(data) =>{
+    const res = await http().post(`/api/geo/eess/cboxAcre`, data)
+    return res.data
+}
