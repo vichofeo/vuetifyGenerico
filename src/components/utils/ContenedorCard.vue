@@ -15,7 +15,7 @@
             color="white"
             
           >
-            <v-img :src="avatar" lazy-src="/img/asuss.png">
+            <v-img :src="avatar" lazy-src="/img/asuss.svg">
               <template v-slot:placeholder>
                 <v-row class="fill-height ma-0" align="center" justify="center">
                   <v-progress-circular

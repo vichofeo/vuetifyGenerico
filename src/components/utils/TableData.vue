@@ -1,29 +1,15 @@
 <template>
     <div v-if="items && headers">
-        <v-card-title v-if="datos.length > 25">
-            &nbsp;&nbsp;
-
-            <v-spacer></v-spacer>
-            <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
-        </v-card-title>
         <v-data-table :headers="datosHeaders" :items="datos" item-key="idx" :item-class="row_classes" :page.sync="page"
-            :items-per-page="itemsPerPage" :search="search" hide-default-footer @page-count="pageCount = $event"
-            v-if="!expand">
-
-            <template v-slot:item.alertax23="{ item }">
-                <ChipAlerta :mensaje="item.alertax23"></ChipAlerta>
-            </template>
-
+            :items-per-page="itemsPerPage" hide-default-footer @page-count="pageCount = $event" disable-sort v-if="!expand">
             <template v-slot:footer v-if="items.length > itemsPerPage">
                 &nbsp;
                 <b-pagination v-model="page" :total-rows="items.length" :per-page="itemsPerPage" aria-controls="my-table"
                     pills>
                 </b-pagination>&nbsp;
             </template>
-            <slot></slot>
         </v-data-table>
-
-        <!-- epand dtable -->
+        <!-- epand dtable --> 
         <v-data-table :headers="datosHeaders" :items="datos" single-expand :expanded.sync="expanded" item-key="idx"
             class="elevation-1" :item-class="row_classesExpand" :page.sync="page" :items-per-page="itemsPerPage"
             hide-default-footer @page-count="pageCount = $event" disable-sort @click:row="viewExpand" v-else>
@@ -33,7 +19,7 @@
                     <slot name="xpnd" :item="item"></slot>
                 </td>
             </template>
-
+                        
             <template v-slot:footer v-if="items.length > itemsPerPage">
                 &nbsp;
                 <b-pagination v-model="page" :total-rows="items.length" :per-page="itemsPerPage" aria-controls="my-table"
@@ -46,19 +32,14 @@
     </div>
 </template>
 <script>
-import ChipAlerta from './ChipAlerta.vue'
 export default {
-    components:{
-    ChipAlerta
-    },
     name: "tableData",
     props: {
         headers: { type: Array, default: [] },
         items: { type: Array, default: [] },
         opColor: { type: String, default: 'teal' },
         expand: { type: Boolean, default: false },
-        itemsPerPage: { type: Number, default: 5 }
-
+        itemsPerPage: {type:Number, default: 5}
     },
     data() {
         return {
@@ -66,8 +47,7 @@ export default {
             page: 1,
             pageCount: 0,
             //itemsPerPage: 5,
-            grillaColor: ['blue', 'teal', 'green', 'amber', 'orange', 'red'],
-            search: "",
+            grillaColor: ['blue', 'teal', 'green', 'amber', 'orange', 'red']
         }
     },
     methods: {

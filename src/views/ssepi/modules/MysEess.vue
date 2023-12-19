@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="ma-2">
     <v-card-title class="primary white--text text-h5">
       Arbol de datos de Establecimientos de Salud
     </v-card-title>
@@ -69,7 +69,7 @@
               <v-avatar size="88">
                 <v-img
                   :src="`/img/${selected.nombre_corto}.png`"
-                  lazy-src="/img/asuss.png"
+                  lazy-src="/img/asuss.svg"
                 >
                   <template v-slot:placeholder>
                     <v-row

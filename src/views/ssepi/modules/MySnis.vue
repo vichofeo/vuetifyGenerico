@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mb-12" color="lighten-1">
-    <v-card-title>Informacion SNIS (ver 001)</v-card-title>
+  <v-card class="ma-5" color="lighten-1">
+    <v-card-title class="font-weight-black" style="color:#1D62A1">Informacion SNIS (ver 001)</v-card-title>
     <v-card-text>
       <v-container>
         <v-row>

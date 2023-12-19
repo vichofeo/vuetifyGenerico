@@ -2,15 +2,19 @@
 * {
   box-sizing: border-box
 }
-
+table{
+  background-color: #cfd8e1;
+}
 .pvtUi {
   table-layout: fixed;
   width: 100%;
-  color: #2a3f5f;
+  /* color de texto bottones y tabla */
   font-family: Verdana;
   border-collapse: collapse;
 } 
 .pvtUi select {
+  /* color de texto de la tabla pricipal */
+  color: #134069;
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -22,6 +26,7 @@
   overflow-x: auto;
 }
 .pvtUi td.pvtOutput {
+  /* linea de abajo de la tabla */
   padding: 6px;
   vertical-align: top;
   border: 1px solid #a2b1c6;
@@ -29,31 +34,44 @@
 }
 
 table.pvtTable {
+  /* datos de la tabla */
   font-size: 8pt;
   text-align: left;
   border-collapse: collapse;
   font-family: Verdana;
 }
 
-table.pvtTable thead tr th,
+table.pvtTable thead tr th{
+  /* cabecera de la tabla */
+  color: white;
+  background-color: #134069;
+  border: 1px solid #ffffff;
+  font-size: 8pt;
+  padding: 5px;
+}
 table.pvtTable tbody tr th {
-  background-color: #ebf0f8;
-  border: 1px solid #c8d4e3;
+  /* lado izquierdo de la tabla */
+  color: #134069;
+  background-color: #899fb4;
+  border: 1px solid #ffffff;
   font-size: 8pt;
   padding: 5px;
 }
 
 table.pvtTable .pvtColLabel {
+  /* texto de cabecera */
   text-align: center;
 }
 table.pvtTable .pvtTotalLabel {
+  /* text de los totales de la tabla */
   text-align: right;
 }
 
 table.pvtTable tbody tr td {
-  color: #2a3f5f;
+  /* centro de la tabla */
+  color: #2a3f5f; /* texto */
   padding: 3px;
-  background-color: #fff;
+  background-color: #fff; 
   border: 1px solid #c8d4e3;
   vertical-align: top;
   text-align: right;
@@ -66,6 +84,7 @@ table.pvtTable tbody tr td {
 
 .pvtRowOrder,
 .pvtColOrder {
+  /* flechas de ordenar */
   cursor: pointer;
   width: 15px;
   margin-left: 5px;
@@ -79,7 +98,7 @@ table.pvtTable tbody tr td {
 }
 
 .pvtAxisContainer,
-.pvtVals {
+.pvtVals {/* pvtVals el cuadro de count */
   border: 1px solid #a2b1c6;
   background: #fff;
   padding: 5px;
@@ -87,6 +106,7 @@ table.pvtTable tbody tr td {
   min-height: 20px;
 }
 .pvtVals.pvtText {
+  /*  */
   vertical-align: middle;
   font-size: 15px;
   font-weight: bold;
@@ -97,7 +117,9 @@ table.pvtTable tbody tr td {
 }
 
 .pvtRenderers {
-  border: 1px solid #a2b1c6;
+  /* cuadro izq superior de la tabla */
+  background-color: white;
+  border: 1px solid #a2b1c6;    
   user-select: none;
   width: 25%;
 }
@@ -115,6 +137,7 @@ table.pvtTable tbody tr td {
   }
 }
 .pvtDropdown {
+  /* radio buton de count */
   border: 1px solid #a2b1c6;
   align-items: center;
   display: block;
@@ -153,6 +176,11 @@ table.pvtTable tbody tr td {
 }
 
 .pvtRows {
+  /* background-color: #899fb4; */
+  height: 35px;
+}
+.pvtCols {
+  /* background-color: #134069; */
   height: 35px;
 }
 
@@ -173,9 +201,10 @@ table.pvtTable tbody tr td {
 }
 
 .pvtAxisContainer li span.pvtAttr {
+  /* botones del cubo */
   -webkit-text-size-adjust: 100%;
-  background: #f3f6fa;
-  border: 2px dashed #c8d4e3;
+  background: #4986be;
+  border: 2px solid #c8d4e3;
   padding: 4px 7px;
   white-space: nowrap;
   -webkit-border-radius: 5px;
@@ -186,6 +215,7 @@ table.pvtTable tbody tr td {
   -moz-user-select: none;
   -khtml-user-select: none;
   -ms-user-select: none;
+  box-shadow: 7px 7px rgba(0,0,0,0.5);
 }
 .pvtAxisContainer li span.pvtAttr.sortonly {
   border: 1px solid #c8d4e3;
@@ -195,27 +225,40 @@ table.pvtTable tbody tr td {
   color: #c5c5c5;
   cursor: not-allowed;
 }
-.pvtTriangle {
-  cursor: pointer;
-  color: #506784;
-}
 
+/* lado horizontal de la tabla */
 .pvtHorizList li {
   display: inline-block;
 }
 
+.pvtCols li {
+  color: black;
+}
+/* lado vertical de la tabla */
 .pvtVertList {
   vertical-align: top;
 }
+.pvtAttr slot{
+  color: white;
+}
 
+
+/* ------------------ cuadro de la lista de botonos------------*/
+/* triangulo de los botones */
+.pvtTriangle {
+  cursor: pointer;
+  color: white;
+}
+/* cuando no seleciona de list de los botones */
 .pvtFilteredAttribute {
+  color: red;
   font-style: italic;
 }
 
 .sortable-chosen .pvtFilterBox {
   display: none !important;
 }
-
+/* lista de los botones */
 .pvtFilterTextClear {
   position: absolute;
   right: 5px;
@@ -227,12 +270,12 @@ table.pvtTable tbody tr td {
 
 .pvtButton {
   display: inline-block;
-  color: #506784;
+  color: white;
   border-radius: 5px;
   padding: 3px 6px;
-  background: #fff;
+  background: #1D62A1;
   border: 1px solid;
-  border-color: #c8d4e3;
+  border-color: #03479a;
   font-size: 14px;
   margin: 3px 3px 6px 0px;
   transition: 0.34s all cubic-bezier(0.19, 1, 0.22, 1);
@@ -240,30 +283,31 @@ table.pvtTable tbody tr td {
 }
 
 .pvtButton:hover {
-  background: #e2e8f0;
-  border-color: #a2b1c6;
+  color: black;
+  background: #ffffff;
+  border-color: #1D62A1;
 }
 
 .pvtButton:active {
-  background: #d1dae6;
+  background: #52575c;
 }
 
 .pvtFilterBox input {
-  border: 1px solid #c8d4e3;
+  border: 1px solid #1D62A1;
   border-radius: 5px;
-  color: #506784;
+  color: #000000;
   padding: 0 3px;
   font-size: 14px;
 }
-
+/* cuadro de busqueda */
 .pvtFilterBox input:focus {
   border-color: #119dff;
   outline: none;
 }
-
+/* cuadro de la lista */
 .pvtFilterBox {
   z-index: 100;
-  border: 1px solid #506784;
+  border: 2px solid #119dff;
   max-width: 600px;
   min-width: 210px;
   background-color: #fff;
@@ -280,7 +324,7 @@ table.pvtTable tbody tr td {
 .pvtFilterBox input[type='text'] {
   display: block;
   width: 100%;
-  color: #2a3f5f;
+  color: black;
   margin-bottom: 5px;
   padding: 6px;
 }
@@ -296,7 +340,7 @@ table.pvtTable tbody tr td {
   overflow-y: scroll;
   width: 100%;
   max-height: 30vh;
-  border-top: 1px solid #dfe8f3;
+  border-top: 1px solid #808387;
 }
 
 .pvtCheckContainer p {
@@ -305,13 +349,13 @@ table.pvtTable tbody tr td {
   padding: 3px;
   cursor: default;
 }
-
+/* color de fondo de los checkbox */
 .pvtCheckContainer p.selected {
-  background: #ebf0f8;
+  background: #92afde;
   min-width: 100%;
   width: max-content;
 }
-
+/* ------------------------------------------------------- */
 .pvtOnly {
   display: none;
   width: 35px;
