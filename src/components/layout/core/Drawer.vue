@@ -21,7 +21,7 @@
       <v-list-item> 
         <v-list-item-avatar class="align-self-center" color="white" contain>
           <v-img
-            src="img/logo.svg"
+            src="img/logo.png"
             max-height="30"
           />
         </v-list-item-avatar>

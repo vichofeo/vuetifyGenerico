@@ -1,46 +1,47 @@
 <template>
-  <v-app >
-    <v-img src="img/fondooscuro.svg" >
-      <v-main>
-
-        <v-container fluid fill-height class="mt-10">
-          <v-layout align-center justify-center>
-            <v-flex xs12 sm8 md4 lg4>
-              <v-card class="elevation-20 pa-3">
-                <v-card-text>
-                  <div>
-                    <img src="img/logo.svg" alt="Epidemiologia SSCP" width="180" height="180" />
-                  </div>
-                  <v-form>
-                    <v-text-field append-icon="mdi-account" name="login" label="Login" type="text" v-model="usuario.login"
-                      :error="error" :rules="[rules.required]"></v-text-field>
-
-                    <v-text-field :type="hidePassword ? 'password' : 'text'"
-                      :append-icon="hidePassword ? 'mdi-eye-off' : 'mdi-eye'" name="password" label="Password"
-                      id="password" :rules="[rules.required]" v-model="usuario.password" :error="error"
-                      @click:append="hidePassword = !hidePassword"></v-text-field>
-                  </v-form>
-                  <p>{{ usuario }}</p>
-                </v-card-text>
-                <div>
-                  <button @click="ingresar()" :loading="loading">Ingresar</button>
+  <v-app id="login" class="primary">
+    <v-main>
+      <v-container fluid fill-height>
+        <v-layout align-center justify-center>
+          <v-flex xs12 sm8 md4 lg4>
+            <v-card class="elevation-1 pa-3">
+              <v-card-text>
+                <div class="layout column align-center">
+                  <img src="img/logo.png" alt="Epidemiologia SSCP" width="180" height="180" />
+                  <h1 class="flex my-4 primary--text text-center">
+                    Area Epidemiologia Bioestadistica
+                  </h1>
                 </div>
-              </v-card>
-            </v-flex>
-          </v-layout>
-        </v-container>
-        <v-snackbar v-model="showResult" :timeout="2000" top>
-          {{ result }}
-        </v-snackbar>
-      </v-main>
-    </v-img>
+                <v-form>
+                  <v-text-field append-icon="mdi-account" name="login" label="Login" type="text" v-model="usuario.login"
+                    :error="error" :rules="[rules.required]"></v-text-field>
+  
+                  <v-text-field :type="hidePassword ? 'password' : 'text'"
+                    :append-icon="hidePassword ? 'mdi-eye-off' : 'mdi-eye'" name="password" label="Password" id="password"
+                    :rules="[rules.required]" v-model="usuario.password" :error="error"
+                    @click:append="hidePassword = !hidePassword"></v-text-field>
+                </v-form>
+                <p>{{ usuario }}</p>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+  
+                <v-btn block color="primary" @click="ingresar()" :loading="loading">Ingresar</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+      <v-snackbar v-model="showResult" :timeout="2000" top>
+        {{ result }}
+      </v-snackbar>
+    </v-main>
   </v-app>
 </template>
 
 <script>
 import Swal from "sweetalert2";
 import * as srv from "@/services/admin/adminService";
-// import miColor from "../../colores"
 
 export default {
   props: {
@@ -48,12 +49,8 @@ export default {
   },
   data() {
     return {
-      ancho: screen.width,
-      alto: screen.height,
-      c_txtA: "blue--text",
-      c_txtB: "white--text",
       usuario: {
-        login: "aorlp",
+        login: "aorsc",
         //login: 'chapare'   ,
         password: "sadmin",
       },
@@ -80,9 +77,6 @@ export default {
       try {
         //envia daros
         const result = await srv.login(vm.usuario);
-
-
-
         if (result.ok) {
           const dataSession = {
             access_token: result.access_token,
@@ -93,7 +87,7 @@ export default {
            * redireccion en funcion al rol ganado
            */
           vm.$router.push({ name: "ssepi" });
-
+          
         } else {
           vm.error = true;
           vm.result = "Login o Password incorrecto.";
@@ -111,45 +105,13 @@ export default {
 </script>
 
 <style scoped lang="css">
-button{
-  background:#1D62A1;
-  color:#fff;
-  border:none;
-  position:relative;
-  height:45px;
-  font-size:1.6em;
-  padding:0 2em;
-  cursor:pointer;
-  transition:800ms ease all;
-  outline:none;
-}
-button:hover{
-  background:#fff;
-  color:#1D62A1;
-}
-button:before,button:after{
-  content:'';
-  position:absolute;
-  top:0;
-  right:0;
-  height:3px;
-  width:0;
-  background: #1D62A1;
-  transition:1000ms ease all;
-}
-button:after{
-  right:inherit;
-  top:inherit;
-  left:0;
-  bottom:0;
-}
-button:hover:before,button:hover:after{
-  width:100%;
-  transition:1000ms ease all;
-}
-
-div{
-  width:100%;
-  text-align: center;
+#login {
+  height: 50%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: "";
+  z-index: 0;
 }
 </style>

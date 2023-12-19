@@ -89,16 +89,6 @@ const routes = [
         meta: { requiereAuth: true },
         props: true
       },
-      {
-        // /ssepi/lgnUser
-        path: 'lgnUser',
-        name: 'lgnUser',
-        component: () => import(/* webpackChunkName: "about" */ "@/views/pagina/lgnSave.vue"),
-        beforeEnter: authGuard,
-        meta: { requiereAuth: true },
-        props: true
-      },
-
 
     ]
   },

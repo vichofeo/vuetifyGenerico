@@ -1,100 +1,91 @@
 <template>
-  <div>
-    <v-navigation-drawer v-model="drawerRight" app clipped width="100" color="#fff">
-      <v-list-item>
-        <div id="logoasuss">
-          <img src="/img/logo.svg" alt="Epidemiologia SSCP" class="mt-5"/>
-        </div>
-      </v-list-item>
-      <br>
+  <v-app-bar id="app-bar" absolute app color="#6A76AB" flat height="50" dark>
+    <v-toolbar-title
+      class="hidden-sm-and-down font-weight-light"
+      v-text="$route.name"
+    />
 
-      <v-list dense nav>
-        <v-menu rounded="lg" bottom right offset-x origin="top left" transition="scale-transition"
-          v-for="(menu, title) in menuOps" :key="`item-${title}`">
-          <template v-slot:activator="{ on, attrs }">
-            <v-tooltip right>
-              <template v-slot:activator="{ on: tooltip }">
-                <v-btn class="mt-1" width="90" height="50" text v-bind="attrs" v-on="{ ...tooltip, ...on }"
-                  @click="() => {localizacion=title; if (!Array.isArray(menu)) $router.push(menu.value).catch(() => { }); }">
-                  <v-img max-width="40" :src='"/img/iconos/" + buscarIcon(title)'></v-img>
-                </v-btn>
-              </template>
-              <span>{{ title }}</span>
-            </v-tooltip>
-          </template>
-          <v-list dense class="text-sm-left ma-2" light nav v-if="Array.isArray(menu)" color="#E8EAF6">
-            <v-subheader class="font-weight-black" style="color: black">{{ title }}</v-subheader>
-            <v-list-item-group color="red">
-              <v-row dense>
-                <v-col cols="12" xs="12" sm="6" md="3" lg="4" xl="4" v-for="(item, index) in menu"
-                  :key="`Subitem-${index}`">
-                  <v-list-item :key="item.text" :to="{ path: item.value, query: { t: new Date().getTime() } }">
-                    <v-list-item-content >
-                      <v-list-item-title>{{ item.text }}</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-col>
-              </v-row>
-            </v-list-item-group>
-          </v-list>
-        </v-menu>
-
+    <div class="mx-3" />
+    {{ sigla }}
+    <!-- 
+      <v-menu bottom left offset-y origin="top right" transition="scale-transition" v-for="(menu, title) in menuOps" :key="`item-${title}`">
+      <template v-slot:activator="{ attrs, on }">
+        <v-btn class="ml-2" min-width="0" text v-bind="attrs" v-on="on"
+        @click="()=>{if(!Array.isArray(menu)) $router.push(menu.value).catch(()=>{}); }"
+        >
+          {{title}} 
+        </v-btn>
+      </template>
+      <v-list  nav v-if="Array.isArray(menu)" tile>
+        <v-row dense>
+          <v-col cols="12" xs="12" sm="6" md="3" lg="4" xl="4" v-for="(opts, i) in menu" 
+          :key="`Subitem-${i}`">
+            <app-bar-item :to="opts.value" >
+              {{ opts.text }}
+            </app-bar-item>    
+                    
+          </v-col>
+        </v-row>
       </v-list>
+    </v-menu> -->
+   
+    <v-menu  rounded="LG" bottom left offset-y origin="top right" transition="scale-transition" 
+    v-for="(menu, title) in menuOps" :key="`item-${title}`">
+        <template v-slot:activator="{ on, attrs }">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on: tooltip }" dark>
+              <v-btn
+              class="ml-2" min-width="0" text
+                v-bind="attrs"
+                v-on="{ ...tooltip, ...on }"                
+                @click="()=>{if(!Array.isArray(menu)) $router.push(menu.value).catch(()=>{}); }"
+              >
+                {{ title }}
+              </v-btn>
+            </template>
+            <span>{{ title }}</span>
+          </v-tooltip>
+        </template>
 
-    </v-navigation-drawer>
+        <v-list dense class="text-sm-left" light nav v-if="Array.isArray(menu)">
+          <v-subheader class="font-weight-black" style="color: #1d62a1"
+            >{{ title }}</v-subheader
+          >
 
-    <v-app-bar app clipped-left color="#1D62A1" dark>
-      <v-btn width="90" height="60" @click.stop="drawerRight = !drawerRight" color="#1D62A1" class="mr-2">
-        <v-icon x-large>mdi-menu</v-icon>
-      </v-btn>
-        <v-toolbar-title class="text ml-4" v-if='localizacion!=""'> {{ localizacion.toUpperCase() }}</v-toolbar-title>
-        <v-toolbar-title class="text ml-4" v-else> GEOREFERENCIA</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <!-- menu del usuario lado derecho -->
-      <div class="d-flex pa-2">
-        <div>
-          <v-toolbar-title class="text mt-4 mr-3">{{ sigla }}</v-toolbar-title>
-          
-        </div>
-        <v-menu rounded="LG" bottom left offset-y origin="top right" transition="scale-transition">
-          <template v-slot:activator="{ on, attrs }">
-            <v-tooltip left>
-              <template v-slot:activator="{ on: tooltip }">
-                <v-btn width="90" height="60" v-bind="attrs" v-on="{ ...tooltip, ...on }" color="#1D62A1">
-                  <v-icon x-large>mdi-account</v-icon>
-                </v-btn>
-              </template>
-              <span>INFORMACION</span>
-            </v-tooltip>
-          </template>
+          <v-list-item-group color="#1D62A1">
+            <v-row dense>
+          <v-col cols="12" xs="12" sm="6" md="3" lg="4" xl="4" v-for="(item, index) in menu"
+          :key="`Subitem-${index}`">
+          <v-list-item  :key="item.text" :to="{path:item.value, query:{t:new Date().getTime()} }">            
+              <v-list-item-content>
+                <v-list-item-title>{{ item.text }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item> 
+                    
+          </v-col>
+        </v-row>
+                       
+          </v-list-item-group>
+        </v-list>
+      </v-menu>
 
-          <v-list color="#E8EAF6" class="ma-2 pa-3 text-center">
-            <v-toolbar-title class="text mt-3 mr-3" v-text="$route.name"></v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn to="/ssepi/lgnUser" class="mt-2 ml-4" color="#1D62A1" dark @click="() => {localizacion='INFORMACION DEL USUARIO'}">Cambiar Contraseña</v-btn>
-            <v-spacer></v-spacer>
-            <v-btn to="/" class="mt-2" color="#1D62A1" dark>Salir</v-btn>
-          </v-list>
-        </v-menu>
-      </div>
 
-    </v-app-bar>
-  </div>
+    <v-spacer></v-spacer>
+    <v-btn class="ml-2" min-width="0" text to="/">
+      <v-icon>mdi-account</v-icon>
+    </v-btn>
+  </v-app-bar>
 </template>
 
 <script>
-
 // Components
 import { VHover, VListItem } from "vuetify/lib";
 
 import * as srv from "@/services/ssepi/mOpsService";
 //import { isNavigationFailure, NavigationFailureType } from 'vue-router/src/util/errors';
 //{ isNavigationFailure, NavigationFailureType }
-
 import VueRouter from "vue-router";
 const { isNavigationFailure, NavigationFailureType } = VueRouter;
-
-
 
 export default {
   name: "DashboardCoreAppBar",
@@ -129,9 +120,7 @@ export default {
   },
 
   data: () => ({
-    localizacion: "",
     selectedItem: [],
-    drawerRight: null,
     sigla: "ASUSS",
     menuOps: [],
     menus: {
@@ -202,20 +191,20 @@ export default {
   methods: {
     async href(obj) {
       await this.$router.push(obj.value).catch(failure => {
-
-        if (isNavigationFailure(failure)) {
-          // ...
-        }
-        // Only duplicated navigations
-        if (isNavigationFailure(failure, NavigationFailureType.duplicated)) {
-          // ...
-          console.log("mallllllllllll", failure)
-        }
-        // Aborted or canceled navigations
-        if (isNavigationFailure(failure, NavigationFailureType.aborted | NavigationFailureType.canceled)) {
-          // ...
-        }
-      })
+  
+  if (isNavigationFailure(failure)) {
+    // ...
+  }
+  // Only duplicated navigations
+  if (isNavigationFailure(failure, NavigationFailureType.duplicated)) {
+    // ...
+    console.log("mallllllllllll", failure)
+  }
+  // Aborted or canceled navigations
+  if (isNavigationFailure(failure, NavigationFailureType.aborted | NavigationFailureType.canceled)) {
+    // ...
+  }
+})
 
       //return undefined;
     },
@@ -224,37 +213,13 @@ export default {
       this.menuOps = result.data;
       this.sigla = result.moredata.institucion;
     },
-    buscarIcon(title)
-    {
-      let Bicon=title.replaceAll(" ", "").toLowerCase().replaceAll("_", "").replaceAll("/", "");
-      switch (Bicon) {
-        case "frmssnis":
-          return "frmssnis.svg";
-        case "georeferencia":
-          return "georeferencia.svg";
-        case "miestablecimiento":
-          return "miestablecimiento.svg";
-        case "misestablecimientos":
-          return "misestablecimientos.svg";
-        case "reportes":
-          return "reportes.svg";
-        case "usuarios":
-          return "usuarios.svg";
-        case "acreditacionhabilitacion":
-          return "acrehabi.svg";
-        default:
-          return "nohay.svg";
-      }
-    }
-
-
   },
 
   mounted() {
     this.getMops();
   },
-
-  beforeRouteUpdate(to, from, next) {
+  
+  beforeRouteUpdate (to, from, next) {
     const toDepth = to.path.split('/').length
     const fromDepth = from.path.split('/').length
     //this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
@@ -262,55 +227,14 @@ export default {
     next()
   },
   watch: {
-
-    '$route'(to, from) {
-      const toDepth = to.path.split('/').length
-      const fromDepth = from.path.split('/').length
-      this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
-
-    }
+  
+  '$route' (to, from) {
+    const toDepth = to.path.split('/').length
+    const fromDepth = from.path.split('/').length
+    this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+  
   }
+}
 
 };
 </script>
-<style scoped lang="css">
-button{
-  background:#fff;
-  border:none;
-  position:relative;
-  height:60px;
-  font-size:1.6em;
-  padding:0 2em;
-  cursor:pointer;
-  transition:800ms ease all;
-  outline:none;
-}
-button:hover{
-  background:#1D62A1;
-  color:rgb(255, 255, 255);  /* color text */
-}
-button:before,button:after{
-  content:'';
-  position:absolute;
-  top:0;
-  right:0;
-  height:3px;
-  width:0;
-  background: #ffffff;  /* barra */
-  transition:400ms ease all;
-}
-button:after{
-  right:inherit;
-  top:inherit;
-  left:0;
-  bottom:0;
-}
-button:hover:before,button:hover:after{
-  width:100%;
-  transition:800ms ease all;
-}
-#logoasuss{
-  width:100%;
-  text-align: center;
-}
-</style>

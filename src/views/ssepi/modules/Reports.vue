@@ -1,5 +1,5 @@
 <template>
-  <div id="contenido">
+  <div >
     <p>&nbsp;</p>
     <ContenedorCard color="#7796bd" :icon="mdi" :title="titulo" class="px-5 py-3">
       <div class="main-wrapper">
@@ -281,10 +281,5 @@ footer {
   text-align: center;
   margin-top: 40px;
   line-height: 2;
-}
-
-#contenido{
-  
-  margin: 4px;
 }
 </style>
