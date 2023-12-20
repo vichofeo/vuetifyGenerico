@@ -1,5 +1,11 @@
 <template>
     <div v-if="items && headers">
+        <v-card-title v-if="datos.length > 25">
+            &nbsp;&nbsp;
+
+            <v-spacer></v-spacer>
+            <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
+        </v-card-title>
         <v-data-table :headers="datosHeaders" :items="datos" v-model="itemSelected"
         item-key="idl" 
         :item-class="row_classes" 
@@ -7,6 +13,7 @@
         :items-per-page="itemsPerPage" 
             :single-select="true"
             show-select
+            :search="search"
             >
             <template v-slot:item.data-table-select="{ isSelected, select, item }">
                     <v-simple-checkbox :color="opColor" :value="isSelected"
@@ -35,7 +42,8 @@ export default {
             page: 1,
             pageCount: 0,
             //itemsPerPage: 5,
-            grillaColor: ['blue', 'teal', 'green', 'amber', 'orange', 'red']
+            grillaColor: ['blue', 'teal', 'green', 'amber', 'orange', 'red'],
+            search: "",
         }
     },
     methods: {
