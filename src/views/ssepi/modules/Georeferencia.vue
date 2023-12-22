@@ -15,7 +15,7 @@
               
               <v-btn @click="switcheaIconosHospitales('all')" v-if="inst.nombre_corto" height="90%" color="rgba(200, 200, 200, 0.2)">
                 <span>Todos: {{ eess.length }}</span>
-                <v-avatar class="profile" left size="30">
+                <v-avatar tile left size="40">
                   <v-img :src="'/img/' + inst.nombre_corto.toLowerCase() + '.png'"></v-img>
                 </v-avatar>
               </v-btn>
@@ -23,7 +23,7 @@
               <v-btn @click="switcheaIconosHospitales(i)" x-small v-for="(nivel, i) in labels.niveles" :key="'img' + i"
                 v-show="niveles" height="90%" color="rgba(200, 200, 200, 0.2)">
                 <span>{{ nivel }}: {{ niveles[i].length }}</span>
-                <v-avatar class="profile" left size="30">
+                <v-avatar tile left size="40">
                   <v-img :src="ICONS[i]"></v-img>
                 </v-avatar>
               </v-btn>
@@ -93,10 +93,14 @@ import { v4 as uuid } from "uuid";
 import { latLng, latLngBounds } from "leaflet";
 import * as srv from "@/services/ssepi/geoRefDataService";
 
-import n1 from "@/assets/1ERNIVEL.png";
-import n2 from "@/assets/2DONIVEL.png";
-import n3 from "@/assets/3ERNIVEL.png";
-import n4 from "@/assets/NBANCOSANGRE.png";
+import n1 from "@/assets/1nivel.svg";
+import n2 from "@/assets/2nivel.svg";
+import n3 from "@/assets/3nivel.svg";
+import n4 from "@/assets/banco.svg";
+import n5 from "@/assets/1nivelN.svg";
+import n6 from "@/assets/2nivelN.svg";
+import n7 from "@/assets/3nivelN.svg";
+import n8 from "@/assets/bancoN.svg";
 import {
   LMap,
   LTileLayer,
@@ -150,10 +154,14 @@ export default {
       large: 64,
     },
     ICONS: {
-      ["1ERNIVEL"]: n1,
-      ["2DONIVEL"]: n2,
-      ["3ERNIVEL"]: n3,
-      NBANCOSANGRE: n4,
+      ["1ERNIVELY"]: n1,
+      ["2DONIVELY"]: n2,
+      ["3ERNIVELY"]: n3,
+      NBANCOSANGREY: n4,
+      ["1ERNIVELN"]: n5,
+      ["2DONIVELN"]: n6,
+      ["3ERNIVELN"]: n7,
+      NBANCOSANGREN: n8,
     },
     swLoader: false,
     ctrlDblClick: {

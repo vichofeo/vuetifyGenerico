@@ -8,7 +8,7 @@
         @blur="date = parseDate(fecha_nacimiento);" 
         background-color="#ffffff" required dense clear-icon="mdi-close-circle" clearable 
         
-        />{{ fecha_nacimiento }} ---- {{ date }}
+        />
     </template>
     
     <v-date-picker color="#1D62A1" v-model="date" locale="es-US" 

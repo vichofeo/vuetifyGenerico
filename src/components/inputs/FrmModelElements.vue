@@ -7,7 +7,8 @@
         <FrmModelElementsBasics
         v-model="item"
         :lengthCols="lengthCols"
-      ></FrmModelElementsBasics></v-card-text>
+      ></FrmModelElementsBasics>
+    </v-card-text>
       <v-card-actions v-if="forEdit"><v-spacer></v-spacer>
         <v-btn
           small
