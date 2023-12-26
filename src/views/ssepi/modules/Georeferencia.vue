@@ -43,11 +43,13 @@
                 :icon-anchor="[ICON_SIZE.normal / 2, ICON_SIZE.normal]" :icon-url="ICONS[icon.nivel_atencion]"
                 :data-id="uuid()" :data-status="false" />
               <l-tooltip v-if="icon.opPopup" :key="uuid()">
-                {{ icon.nombre_institucion }} <br />
-                {{ icon.telefono }} {{ icon.direccion_web }} <br />
-                {{ icon.nombre_dpto }} - {{ icon.zona_barrio }} -
+                <strong>Establecimiento:</strong> {{ icon.nombre_institucion }} <br />
+                <strong>Telefono: </strong>{{ icon.telefono }} {{ icon.direccion_web }} <br />
+                <strong>Direccion: </strong>{{ icon.nombre_dpto }} - {{ icon.zona_barrio }} -
                 {{ icon.avenida_calle }} <br />
-                {{ icon.clase }} - {{ icon.nivel_atencion }}
+                <strong>Tipo: </strong>{{ icon.clase }} - {{ icon.nivel }}<br/>
+                <i>Haga Clic para mas opciones</i>
+
                 <!-- <div v-if="!icon.sw">
                   <i>Doble click para editar ubicacion </i>
                 </div>
@@ -60,7 +62,7 @@
                 <l-popup id="cajaMen" position="bottomleft">
                   <l-control id="cajaMen2">
                     <button class="button" @click="inner2Click(icon, index)"
-                      v-if="establecimientos[index].sw === false">Editar longuitud
+                      v-if="establecimientos[index].sw === false">Editar lat/lng
                     </button>
                     <button class="button" @click="inner2Click(icon, index)" v-else>Guardar
                     </button>
