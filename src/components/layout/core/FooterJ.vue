@@ -9,6 +9,7 @@
             <v-icon size="24px" color="#E3F2FD">{{ icon }}</v-icon>
           </v-btn>
         </v-card-text>
+        
 
         <v-card-text class="white--text">
           <span>Area de Epidemiológia y Bioestadistica</span> — {{ new Date().getFullYear() }}
