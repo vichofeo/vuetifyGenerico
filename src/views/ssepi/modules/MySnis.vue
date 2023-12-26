@@ -4,7 +4,7 @@
     <v-card-text>
       <v-container>
         <v-row>
-          <v-col cols="12" xs="12" sm="12" md="6" xl="4" lg="4" v-for="(obj, key, index) in cboxs"
+          <v-col cols="12" xs="12" sm="12" md="6" xl="3" lg="3" v-for="(obj, key, index) in cboxs"
             :key="'comboxes_' + index">
             <!--<combo-box-forms v-model="seleccionados[index]" :itemsCombo="obj.items" :label="obj.label" class="ml-auto" dense
                             :onChange="obtieneData"></combo-box-forms>-->
@@ -41,7 +41,6 @@
                     {{ option }}
                   </option>
                 </select>
-                ::::{{ selectedAtributo[index] }}
               </div>
               <div class="sidebar-box">
                 <select v-model="selectedValor[index]" class="styled-select">
@@ -49,13 +48,13 @@
                     {{ option }}
                   </option>
                 </select>
-                ::::{{ selectedValor[index] }}
               </div>
               </p>
 
               <template v-slot:actions>
                 <v-icon class="mr-1" small> mdi-clock-outline </v-icon>
-                <span class="caption grey--text font-weight-light">campaign sent 26 minutes ago</span>
+                <span class="caption grey--text font-weight-light">{{ seleccionados[5].text }}/ {{ seleccionados[6].text
+                }}</span>
               </template>
             </contenedor-card-chars>
           </v-col>
@@ -151,7 +150,7 @@ export default {
 
           for (const obj in this.cboxs)
             this.seleccionados.push(this.cboxs[obj].selected);
-          //obtiene opci default
+          //obtiene opcion default
           for (const key in this.datos) {
             this.listAtributo[key].length > 1 ? this.listAtributo[key].push(this.e1) : ""
             this.selectedAtributo.push(this.listAtributo[key][0])
@@ -173,26 +172,27 @@ export default {
       }
     },
 
+    /**
+     * recompone combos de grafico con la opcion todos
+     * */
     dataChartist(obj, list1, list2) {
-      
+
       const series = []
-      if (list1 != this.e1){
-        
+      if (list1 != this.e1) {
+
         series.push({
           name: list1,
           data: obj.series[list1][list2].map(z => parseInt(z, 10)),
         })
-      }else{
+      } else {
         for (const key in obj.series) {
-          
           series.push({
-          name: key,
-          data: obj.series[key][list2].map(z => parseInt(z, 10)),
-        })            
+            name: key,
+            data: obj.series[key][list2].map(z => parseInt(z, 10)),
+          })
         }
-        
-        
-      }  
+
+      }
       return {
         labels: obj.labels,
         series: series,
