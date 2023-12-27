@@ -4,7 +4,7 @@
     <ContenedorCard color="blue dark-1" :title="titulo" :image="true">
       <FrmModelElements
         v-model="parametros[indexParam]"
-        :lengthCols="4"
+        :lengthCols="6"
         :index-param="indexParam"
         :index-from-url="indexReal"
         :recarga="recargar"
