@@ -1,7 +1,7 @@
 <template>
   <div id="margen">
     <p>&nbsp;</p>
-    <ContenedorCard color="blue dark-1" :title="titulo" :image="true">
+    <ContenedorCard color="#1D62A1" :title="titulo" :image="true">
       <FrmModelElements
         v-model="parametros[indexParam]"
         :lengthCols="6"
