@@ -8,9 +8,9 @@
         :key="'chekFrm' + name + i"
       >
         <v-checkbox
-          v-model="dataModel"
+          v-model="dataModel.value"
           :label="obj.text"
-          color="orange-darken-3"
+          color="blue"
           :value="obj.value"
           hide-details
         ></v-checkbox>
