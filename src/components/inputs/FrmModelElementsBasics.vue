@@ -10,7 +10,7 @@
       v-for="(obj, nameObj) in item.campos"
       :key="'srhTb' + nameObj"
     >
-    <div>{{ obj[3] }}</div>
+    
       <!-- solo texto -->
       <v-text-field class="nuevo"
         v-model="item.valores[nameObj]"
