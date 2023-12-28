@@ -1,10 +1,10 @@
 <template>
   <div id="margen">
     <p>&nbsp;</p>
-    <ContenedorCard color="#1D62A1" :title="titulo" :image="true">
+    <ContenedorCard color="#1D62A1" :title="titulo" :image="true">      
       <FrmModelElements
         v-model="parametros[indexParam]"
-        :lengthCols="6"
+        :lengthCols="lengthCols"
         :index-param="indexParam"
         :index-from-url="indexReal"
         :recarga="recargar"
@@ -79,6 +79,13 @@ export default {
     // just use `this`
     this.frm = to.params.idx;
     this.getModuleDta();
+  },
+  computed: {
+    lengthCols (){
+      if(this.frm=='servicios_basicos')
+      return 4
+    else return 6
+    }
   },
 };
 </script>
